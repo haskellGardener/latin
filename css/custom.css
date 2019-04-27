@@ -1,8 +1,10 @@
 /* */
 
-h1 { font-size   : 4mm;
+h1 { font-size   : 3.8mm;
      font-weight : normal;
      text-align  : center;
+     padding: 0;
+     margin: 0;
    }
 
 table.nomen { margin-top: 5mm;
