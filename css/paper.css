@@ -1,5 +1,7 @@
 @page { margin: 0 }
-body { margin: 0 }
+body { margin: 0;
+       background: white;
+     }
 .sheet {
   margin: 0;
   overflow: hidden;
@@ -9,7 +11,7 @@ body { margin: 0 }
 }
 
 /** Paper sizes **/
-body.A5           .sheet { width: 148mm; height: 193mm } /* originally 210mm */
+body.A5 .sheet { width: 148mm; height: 193mm } /* originally 210mm */
 
 /** Padding area **/
 .sheet.padding-10mm { padding: 10mm }
@@ -19,7 +21,6 @@ body.A5           .sheet { width: 148mm; height: 193mm } /* originally 210mm */
 
 /** For screen preview **/
 @media screen {
-  body { background: #e0e0e0 }
   .sheet {
     background: white;
     box-shadow: 0 .5mm 2mm rgba(0,0,0,.3);
@@ -28,7 +29,6 @@ body.A5           .sheet { width: 148mm; height: 193mm } /* originally 210mm */
   }
 }
 
-/** Fix for Chrome issue #273306 **/
 @media print {
-  body.A5                    { width: 148mm }
+  body.A5 { width: 148mm }
 }
