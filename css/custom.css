@@ -5,7 +5,11 @@ h1 { font-size   : 4mm;
      text-align  : center;
    }
 
-table.nomen { margin-top: 5mm; }
+table.nomen { margin-top: 5mm;
+              margin-right: 5mm;
+              display: inline-block;
+              padding-bottom: 2mm;
+            }
 
 table.nomen td { padding: 0 1.7mm; }
 table.nomen td > em, table.nomen th > em
@@ -16,6 +20,7 @@ table.nomen th > b
 { font-style   : italic;
   font-weight  : 100;
   padding-left : 4mm;
+  font-size    : 3mm;
 }
 table.nomen td:nth-child(odd) { background: #f4f4f4; }
 table.nomen td:nth-child(1) { text-align  : right;
@@ -32,6 +37,7 @@ table.nomen th { padding       : 1.7mm;
                  font-weight   : normal;
                  border-bottom : 0.2mm solid #ccc;
                  line-height   : 2.7mm;
+                 text-align    : left;
                }
 table.nomen th:nth-child(odd) { background: #f4f4f4; }
 table.nomen th:nth-child(3)   { color: #CC0033; }
@@ -44,4 +50,5 @@ table.nomen th.topper { padding     : 0 0 1.5mm 0;
                         background  : transparent;
                         border      : 0;
                         line-height : 3mm;
+                        text-align  : center;
                       }
