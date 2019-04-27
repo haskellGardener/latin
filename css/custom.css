@@ -1,36 +1,47 @@
 /* */
 
-h1 { font-size: 4mm;
-     font-weight: normal;
-     text-align: center;
-     
+h1 { font-size   : 4mm;
+     font-weight : normal;
+     text-align  : center;
    }
 
-table.nomen td { padding: 2mm;
+table.nomen { margin-top: 5mm; }
+
+table.nomen td { padding: 0 1.7mm; }
+table.nomen td > em, table.nomen th > em
+{ font-style : normal;
+  color      : #0A6A1D;
+}
+table.nomen th > b
+{ font-style   : italic;
+  font-weight  : 100;
+  padding-left : 4mm;
+}
+table.nomen td:nth-child(odd) { background: #f4f4f4; }
+table.nomen td:nth-child(1) { text-align  : right;
+                              font-size   : 2.5mm;
+                              padding-top : 0.7mm;
+                            }
+table.nomen td:nth-child(n+2) { text-align  : left;
+                                font-size   : 4mm;
+                                line-height : 140%;
+                                font-family : "Times New Roman", Times, serif;
+                              }
+
+table.nomen th { padding       : 1.7mm;
+                 font-weight   : normal;
+                 border-bottom : 0.2mm solid #ccc;
+                 line-height   : 2.7mm;
                }
-table.nomen td:nth-child(odd) { background: #f4f4f4;
-                              }
-table.nomen td:nth-child(1) { text-align: right;
-                              font-size: 2.7mm;
-                            }
+table.nomen th:nth-child(odd) { background: #f4f4f4; }
+table.nomen th:nth-child(3)   { color: #CC0033; }
+table.nomen th:nth-child(n+2) { font-size: 2.0mm; }
+table.nomen th:nth-child(1)   { font-size: 2.7mm; }
 
-
-table.nomen th { padding: 2mm;
-                 font-weight: normal;
-                 border-bottom: 0.2mm solid #ccc;
-               }
-table.nomen th:nth-child(odd) { background: #f4f4f4;
-                              }
-table.nomen th:nth-child(3) { color: #CC0033;
-                            }
-table.nomen th:nth-child(n+2) { font-size: 2.2mm;
-                              }
-table.nomen th:nth-child(1) { font-size: 2.7mm;
-                            }
-
-table.nomen th.topper { padding: 2mm;
-                        font-weight: normal;
-                        font-size: 3.3mm;
-                        background: transparent;
-                        border: 0;
+table.nomen th.topper { padding     : 0 0 1.5mm 0;
+                        font-weight : normal;
+                        font-size   : 4mm;
+                        background  : transparent;
+                        border      : 0;
+                        line-height : 3mm;
                       }
