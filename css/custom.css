@@ -1,6 +1,12 @@
 /* */
 article { column-count: 2; }
-
+footer { font-size: 3mm ;
+         text-align: right;
+         font-family : "Times New Roman", Times, serif;
+         position: absolute;
+         bottom: 3mm;
+         right: 15mm;
+       }
 h1 { font-size   : 3.8mm;
      font-weight : normal;
      text-align  : center;

@@ -11,11 +11,11 @@ body { margin: 0;
 }
 
 /** Paper sizes **/
-body.A5 .sheet { width: 148mm; height: 193mm } /* originally 210mm */
+body.A5 .sheet { width: 148mm; height: 205mm } /* originally 210mm */
 
 /** Padding area **/
 .sheet.padding-10mm { padding: 10mm }
-.sheet.padding-15mm { padding: 10mm 15mm 15mm 15mm}
+.sheet.padding-15mm { padding: 10mm 15mm 5mm 15mm}
 .sheet.padding-20mm { padding: 20mm }
 .sheet.padding-25mm { padding: 25mm }
 
@@ -25,7 +25,7 @@ body.A5 .sheet { width: 148mm; height: 193mm } /* originally 210mm */
     background: white;
     box-shadow: 0 .5mm 2mm rgba(0,0,0,.3);
     margin: 5mm;
-    border-bottom: solid 9mm white;
+    /* border-bottom: solid 9mm white; */
   }
 }
 
