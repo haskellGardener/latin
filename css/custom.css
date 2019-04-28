@@ -1,5 +1,6 @@
 /* */
 article { column-count: 2; }
+article.single { column-count: 1; }
 footer { font-size: 3mm ;
          text-align: right;
          font-family : "Times New Roman", Times, serif;
@@ -25,6 +26,11 @@ table.nomen td > em, table.nomen th > em
 { font-style : normal;
   color      : #0A6A1D;
 }
+
+table.nomen td > em.ium { color       : blue;
+                          font-weight : 600;
+                        }
+
 table.nomen th > b
 { font-style   : italic;
   font-weight  : 100;
