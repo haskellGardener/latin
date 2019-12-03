@@ -32,6 +32,10 @@ library
                    , Nomen
   build-depends:     base >= 4.8 && < 5
                    , text
+  extensions: TemplateHaskell
+              QuasiQuotes
+              OverloadedStrings
+              NoMonomorphismRestriction
 
 executable grammatica-exe
   default-language:  Haskell2010

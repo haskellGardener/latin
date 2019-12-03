@@ -1,3 +1,5 @@
+
+
 module Nomen
 
 where
@@ -146,6 +148,7 @@ declensions = [ Declension { ndeclinatio = NomenPrima
                                                       , numerus = Pluralis
                                                       , stem = ""
                                                       , terminatur = "īs"
+                                                      }
                                           , Paradigma { casus = Dativus
                                                       , genera = Masculinum
                                                       , numerus = Pluralis
@@ -181,6 +184,7 @@ declensions = [ Declension { ndeclinatio = NomenPrima
                                                       , numerus = Pluralis
                                                       , stem = ""
                                                       , terminatur = "īs"
+                                                      }
                                           , Paradigma { casus = Ablativus
                                                       , genera = Masculinum
                                                       , numerus = Pluralis
