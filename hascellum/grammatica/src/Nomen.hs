@@ -52,6 +52,7 @@ where
 import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.List as DL
+-- import Data.Ord
 
 data Casus
   = Nominativus | Vocativus | Accusativus | Genetivus | Dativus | Ablativus -- -- | Locativus
@@ -94,7 +95,9 @@ data Paradigma
               }
     deriving (Show, Eq)
 
--- Will need to build a sort based on Casus.
+
+instance Ord Paradigma where
+  compare a b = casus a `compare` casus b
 
 noMacron :: Text -> Text
 noMacron input = T.map mapF input
@@ -107,10 +110,10 @@ noMacron input = T.map mapF input
     mapF a = a
 
 scribeResPerfectumSingularis :: Nomen -> [] Text
-scribeResPerfectumSingularis Nomen {..} = map resPerfectum $ filter ((== Singularis) . numerus) paradigma
+scribeResPerfectumSingularis Nomen {..} = map resPerfectum $ DL.sort $ filter ((== Singularis) . numerus) paradigma
 
 scribeResPerfectumPluralis :: Nomen -> [] Text
-scribeResPerfectumPluralis Nomen {..} = map resPerfectum $ filter ((== Pluralis) . numerus) paradigma
+scribeResPerfectumPluralis Nomen {..} = map resPerfectum $ DL.sort $ filter ((== Pluralis) . numerus) paradigma
 
 faceParadigma :: NDeclinationes -> Text -> Text -> Text -> NominisSpecies -> Genera -> Maybe Nomen
 faceParadigma _ "" _ _ _ _ = Nothing
@@ -156,8 +159,8 @@ faceParadigma ndecl dictionariumArticulum articulumSuffixum genetivusRadix nomen
                               , ..
                               }
                | otherwise
-                 -> Paradigma { radix = genetivusRadix 
-                              , resPerfectum = T.append genetivusRadix suffixum
+                 -> Paradigma { radix = genetivusRadix
+                              , resPerfectum = dictionariumArticulum -- T.append genetivusRadix suffixum
                               , ..
                               }
         subMapF NomenQuinta Genetivus _ Singularis
@@ -396,14 +399,14 @@ declinationes =
                              , genera = Masculinum
                              , numerus = Singularis
                              , radix = ""
-                             , suffixum = "e"
+                             , suffixum = ""
                              , resPerfectum = ""
                              }
                  , Paradigma { casus = Vocativus
                              , genera = Femininum
                              , numerus = Singularis
                              , radix = ""
-                             , suffixum = "er"
+                             , suffixum = ""
                              , resPerfectum = ""
                              }
                  , Paradigma { casus = Vocativus
@@ -1157,14 +1160,14 @@ declinationes =
                              , genera = Masculinum
                              , numerus = Pluralis
                              , radix = ""
-                             , suffixum = "ēn"
+                             , suffixum = "ēbus"
                              , resPerfectum = ""
                              }
                  , Paradigma { casus = Dativus
                              , genera = Femininum
                              , numerus = Pluralis
                              , radix = ""
-                             , suffixum = "ē"
+                             , suffixum = "ēbus"
                              , resPerfectum = ""
                              }
                  , Paradigma { casus = Ablativus
@@ -1178,7 +1181,7 @@ declinationes =
                              , genera = Femininum
                              , numerus = Singularis
                              , radix = ""
-                             , suffixum = "ēbus"
+                             , suffixum = "ē"
                              , resPerfectum = ""
                              }
                  , Paradigma { casus = Ablativus
@@ -1198,3 +1201,229 @@ declinationes =
                  ]
                }
   ]
+
+
+
+
+{- For testing
+
+NomenSecunda Masculinum
+[ 
+    ( "filius" 
+    , "filiī" 
+    ) 
+, 
+    ( "filie" 
+    , "filiī" 
+    ) 
+, 
+    ( "filium" 
+    , "filiōs" 
+    ) 
+, 
+    ( "filiī" 
+    , "filiōrum" 
+    ) 
+, 
+    ( "filiō" 
+    , "filiīs" 
+    ) 
+, 
+    ( "filiō" 
+    , "filiīs" 
+    ) 
+]
+
+NomenSecunda Masculinum
+[ 
+    ( "ager" 
+    , "agrī" 
+    ) 
+, 
+    ( "ager" 
+    , "agrī" 
+    ) 
+, 
+    ( "agrum" 
+    , "agrōs" 
+    ) 
+, 
+    ( "agrī" 
+    , "agrōrum" 
+    ) 
+, 
+    ( "agrō" 
+    , "agrīs" 
+    ) 
+, 
+    ( "agrō" 
+    , "agrīs" 
+    ) 
+]
+
+NomenSecunda Neutrum
+[ 
+    ( "bellum" 
+    , "bella" 
+    ) 
+, 
+    ( "bellum" 
+    , "bella" 
+    ) 
+, 
+    ( "bellum" 
+    , "bella" 
+    ) 
+, 
+    ( "bellī" 
+    , "bellōrum" 
+    ) 
+, 
+    ( "bellō" 
+    , "bellīs" 
+    ) 
+, 
+    ( "bellō" 
+    , "bellīs" 
+    ) 
+] 
+
+maybe [] scribeResPerfectumSingularis $ faceParadigma NomenSecunda "bellum" "ī" "bell" Appellativum Neutrum
+[ "bellum" 
+, "bellum" 
+, "bellum" 
+, "bellī" 
+, "bellō" 
+, "bellō" 
+] 
+
+maybe [] scribeResPerfectumPluralis    $ faceParadigma NomenSecunda "bellum" "ī" "bell" Appellativum Neutrum 
+[ "bella" 
+, "bella" 
+, "bella" 
+, "bellōrum" 
+, "bellīs" 
+, "bellīs" 
+] 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+NomenQuinta Masculinum Femininum
+[ 
+    ( "diēs" 
+    , "diēs" 
+    ) 
+, 
+    ( "diem" 
+    , "diēs" 
+    ) 
+, 
+    ( "diēī" 
+    , "diērum" 
+    ) 
+, 
+    ( "diēī" 
+    , "diēbus" 
+    ) 
+, 
+    ( "diē" 
+    , "diēbus" 
+    ) 
+]
+
+NomenQuinta Femininum
+[ 
+    ( "rēs" 
+    , "rēs" 
+    ) 
+, 
+    ( "rem" 
+    , "rēs" 
+    ) 
+, 
+    ( "reī" 
+    , "rērum" 
+    ) 
+, 
+    ( "reī" 
+    , "rēbus" 
+    ) 
+, 
+    ( "rē" 
+    , "rēbus" 
+    ) 
+] 
+
+NomenQuarta Femininum
+[ 
+    ( "manus" 
+    , "manūs" 
+    ) 
+, 
+    ( "manum" 
+    , "manūs" 
+    ) 
+, 
+    ( "manūs" 
+    , "manuum" 
+    ) 
+, 
+    ( "manuī" 
+    , "manibus" 
+    ) 
+, 
+    ( "manū" 
+    , "manibus" 
+    ) 
+] 
+
+
+NomenQuarta Neutrum
+[ 
+    ( "cornū" 
+    , "cornua" 
+    ) 
+, 
+    ( "cornū" 
+    , "cornua" 
+    ) 
+, 
+    ( "cornūs" 
+    , "cornuum" 
+    ) 
+, 
+    ( "cornū" 
+    , "cornibus" 
+    ) 
+, 
+    ( "cornū" 
+    , "cornibus" 
+    ) 
+] 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-}
