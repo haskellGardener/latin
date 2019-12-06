@@ -106,6 +106,12 @@ noMacron input = T.map mapF input
     mapF 'ī' = 'i'
     mapF a = a
 
+scribeResPerfectumSingularis :: Nomen -> [] Text
+scribeResPerfectumSingularis Nomen {..} = map resPerfectum $ filter ((== Singularis) . numerus) paradigma
+
+scribeResPerfectumPluralis :: Nomen -> [] Text
+scribeResPerfectumPluralis Nomen {..} = map resPerfectum $ filter ((== Pluralis) . numerus) paradigma
+
 faceParadigma :: NDeclinationes -> Text -> Text -> Text -> NominisSpecies -> Genera -> Maybe Nomen
 faceParadigma _ "" _ _ _ _ = Nothing
 faceParadigma _ _ _ "" _ _ = Nothing
@@ -312,20 +318,6 @@ declinationes =
                              , suffixum = "īs"
                              , resPerfectum = ""
                              }
-                 , Paradigma { casus = Dativus
-                             , genera = Masculinum
-                             , numerus = Pluralis
-                             , radix = ""
-                             , suffixum = "ābus"
-                             , resPerfectum = ""
-                             }
-                 , Paradigma { casus = Dativus
-                             , genera = Femininum
-                             , numerus = Pluralis
-                             , radix = ""
-                             , suffixum = "ābus"
-                             , resPerfectum = ""
-                             }
                  , Paradigma { casus = Ablativus
                              , genera = Masculinum
                              , numerus = Singularis
@@ -352,20 +344,6 @@ declinationes =
                              , numerus = Pluralis
                              , radix = ""
                              , suffixum = "īs"
-                             , resPerfectum = ""
-                             }
-                 , Paradigma { casus = Ablativus
-                             , genera = Masculinum
-                             , numerus = Pluralis
-                             , radix = ""
-                             , suffixum = "ābus"
-                             , resPerfectum = ""
-                             }
-                 , Paradigma { casus = Ablativus
-                             , genera = Femininum
-                             , numerus = Pluralis
-                             , radix = ""
-                             , suffixum = "ābus"
                              , resPerfectum = ""
                              }
                  ]
