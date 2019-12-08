@@ -95,18 +95,27 @@ data Paradigma
               }
     deriving (Show, Eq)
 
-
 instance Ord Paradigma where
   compare a b = casus a `compare` casus b
 
-noMacron :: Text -> Text
-noMacron input = T.map mapF input
+labefaceApex :: Text -> Text
+labefaceApex input = T.map mapF input
   where
     mapF 'ā' = 'a'
     mapF 'ō' = 'o'
     mapF 'ē' = 'e'
     mapF 'ū' = 'u'
     mapF 'ī' = 'i'
+    mapF a = a
+
+facApex :: Text -> Text
+facApex input = T.map mapF input
+  where
+    mapF 'a' = 'ā'
+    mapF 'o' = 'ō'
+    mapF 'e' = 'ē'
+    mapF 'u' = 'ū'
+    mapF 'i' = 'ī'
     mapF a = a
 
 scribeResPerfectumSingularis :: Nomen -> [] Text
@@ -119,7 +128,6 @@ faceParadigma :: NDeclinationes -> Text -> Text -> Text -> NominisSpecies -> Gen
 faceParadigma _ "" _ _ _ _ = Nothing
 faceParadigma _ _ _ "" _ _ = Nothing
 faceParadigma NomenTertia _ "" _ _ _ = Nothing
--- faceParadigma NomenTertia dictionariumArticulum articulumSuffixum genetivusRadix nomenSpecies = Nothing
 faceParadigma ndecl dictionariumArticulum articulumSuffixum genetivusRadix nomenSpecies genera_pp =
   case mdeclinatio of
     Nothing -> Nothing
@@ -138,33 +146,43 @@ faceParadigma ndecl dictionariumArticulum articulumSuffixum genetivusRadix nomen
          | otherwise -> Nothing
 
     finalize paradigma' =
-      Nomen { paradigma  = map mapF $ filter filterF paradigma'
+      Nomen { paradigma  = map mapF $ filter percolaF paradigma'
             , declinatio = ndecl
             , nomenGenus = genera_pp
             , ..
             }
 
-    filterF :: Paradigma -> Bool
-    filterF = (genera_pp ==) . genera
+    percolaF :: Paradigma -> Bool -- percōlō, percōlāre, percōlāve, percōlātum   (imperativus >> percōlā)
+    percolaF = (genera_pp ==) . genera
       
     mapF :: Paradigma -> Paradigma
     mapF Paradigma {..} = subMapF ndecl casus genera numerus
       where
         subMapF :: NDeclinationes -> Casus -> Genera -> Numeri -> Paradigma
+        subMapF NomenTertia Nominativus _ Singularis 
+          = Paradigma { radix = ""
+                      , resPerfectum = dictionariumArticulum
+                      , ..
+                      }
+        subMapF NomenTertia Accusativus Neutrum Singularis 
+          = Paradigma { radix = ""
+                      , resPerfectum = dictionariumArticulum
+                      , ..
+                      }
         subMapF NomenSecunda Vocativus _ Singularis 
-          = if |    "ius" `T.isSuffixOf` noMacron dictionariumArticulum
-                 || "ium" `T.isSuffixOf` noMacron dictionariumArticulum
+          = if |    "ius" `T.isSuffixOf` labefaceApex dictionariumArticulum
+                 || "ium" `T.isSuffixOf` labefaceApex dictionariumArticulum
                  -> Paradigma { radix = genetivusRadix 
                               , resPerfectum =  T.append genetivusRadix "e"
                               , ..
                               }
                | otherwise
                  -> Paradigma { radix = genetivusRadix
-                              , resPerfectum = dictionariumArticulum -- T.append genetivusRadix suffixum
+                              , resPerfectum = dictionariumArticulum
                               , ..
                               }
         subMapF NomenQuinta Genetivus _ Singularis
-          = if | "ies" `T.isSuffixOf` noMacron dictionariumArticulum
+          = if | "ies" `T.isSuffixOf` labefaceApex dictionariumArticulum
                  -> Paradigma { radix = genetivusRadix 
                               , resPerfectum = T.append genetivusRadix "ēī"
                               , suffixum = "ēī"
@@ -177,7 +195,7 @@ faceParadigma ndecl dictionariumArticulum articulumSuffixum genetivusRadix nomen
                               , ..
                               }
         subMapF NomenQuinta Dativus _ Singularis
-          = if | "ies" `T.isSuffixOf` noMacron dictionariumArticulum
+          = if | "ies" `T.isSuffixOf` labefaceApex dictionariumArticulum
                  -> Paradigma { radix = genetivusRadix 
                               , resPerfectum = T.append genetivusRadix "ēī"
                               , suffixum = "ēī"
@@ -721,13 +739,13 @@ declinationes =
                              , suffixum = "um"
                              , resPerfectum = ""
                              }
-                 , Paradigma { casus = Genetivus
-                             , genera = Masculinum
-                             , numerus = Pluralis
-                             , radix = ""
-                             , suffixum = "īum"
-                             , resPerfectum = ""
-                             }
+                 -- , Paradigma { casus = Genetivus
+                 --             , genera = Masculinum
+                 --             , numerus = Pluralis
+                 --             , radix = ""
+                 --             , suffixum = "īum"
+                 --             , resPerfectum = ""
+                 --             }
                  , Paradigma { casus = Genetivus
                              , genera = Femininum
                              , numerus = Pluralis
@@ -735,13 +753,13 @@ declinationes =
                              , suffixum = "um"
                              , resPerfectum = ""
                              }
-                 , Paradigma { casus = Genetivus
-                             , genera = Femininum
-                             , numerus = Pluralis
-                             , radix = ""
-                             , suffixum = "īum"
-                             , resPerfectum = ""
-                             }
+                 -- , Paradigma { casus = Genetivus
+                 --             , genera = Femininum
+                 --             , numerus = Pluralis
+                 --             , radix = ""
+                 --             , suffixum = "īum"
+                 --             , resPerfectum = ""
+                 --             }
                  , Paradigma { casus = Genetivus
                              , genera = Neutrum
                              , numerus = Pluralis
@@ -749,13 +767,13 @@ declinationes =
                              , suffixum = "um"
                              , resPerfectum = ""
                              }
-                 , Paradigma { casus = Genetivus
-                             , genera = Neutrum
-                             , numerus = Pluralis
-                             , radix = ""
-                             , suffixum = "īum"
-                             , resPerfectum = ""
-                             }
+                 -- , Paradigma { casus = Genetivus
+                 --             , genera = Neutrum
+                 --             , numerus = Pluralis
+                 --             , radix = ""
+                 --             , suffixum = "īum"
+                 --             , resPerfectum = ""
+                 --             }
                  , Paradigma { casus = Dativus
                              , genera = Masculinum
                              , numerus = Singularis
