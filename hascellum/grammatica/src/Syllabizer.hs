@@ -62,11 +62,11 @@ import Data.Either (isRight, fromRight)
 
 consonantes :: [] Text -- cōnsonāns cōnsonantēs f
 consonantes = [ "qu", "ch", "ph", "th"
-              , "b", "c", "d", "f", "g", "h", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "x", "y", "z" -- , "i"
+              , "b", "c", "d", "f", "g", "h", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "x", "y", "z" -- , "i" -- requires backtracking.
               ]
 
 vocales :: [] Text -- vōcālis vōcālēs f
-vocales = ["a", "e", "i", "o", "u", "y"]
+vocales = ["ā", "ē", "ī", "ō", "ū", "a", "e", "i", "o", "u", "y"]
 
 diphthongi :: [] Text -- diphthongus diphthongī f
 diphthongi = ["ae", "au", "ei", "eu", "oe", "ui"]
@@ -90,14 +90,14 @@ outerToken :: Text -> [SylPar]
 outerToken x = fromRight [] $ parseOnly tokenIzer x
 
 tokenToText :: [SylPar] -> Text
-tokenToText x = sylparToText x              
+tokenToText x = sylparToText x
 
 textToTexts :: Text -> [Text]
 textToTexts t = fromRight [] $ parseOnly syllabizer2 t
 
 textToSylparO :: Text -> [Text] -> [[SylPar]]
 textToSylparO t ts = textToSylpar (outerToken t) ts
-                
+
 data SylPar = Vowel Text
             | Diphthong Text
             | Consonant Text
@@ -106,14 +106,38 @@ data SylPar = Vowel Text
 
 tokenIzer :: Parser [SylPar]
 tokenIzer = do
-  tokens <- many1 $ choice [diphthongs, vowels, stopLiquidy, consonants]
+  tokens <- (do early <- consonantalVowels
+                tokens' <- tokes
+                pure $  (early:[]) ++ tokens'
+            ) <|> tokes
+
   endOfInput
-  pure tokens
+  pure $ join tokens
   where
-    vowels      = (choice $ map string vocales    ) >>= pure . Vowel
-    consonants  = (choice $ map string consonantes) >>= pure . Consonant
-    diphthongs  = (choice $ map string diphthongi ) >>= pure . Diphthong
-    stopLiquidy = (choice $ map string stopLiquids) >>= pure . StopLiquid
+    tokes :: Parser [[SylPar]]
+    tokes = many1 $ choice [diphthongs, consonantalVowelsI, vowels, stopLiquidy, consonants]
+
+    consonantalVowels :: Parser [SylPar]
+    consonantalVowels = do
+      cv <- string "i" <|> string "ī"
+      vowel <- choice $ map string vocales
+      pure [Consonant cv, Vowel vowel]
+
+    {- Between two vowels within a word i served in double capacity: as the vowel i forming a
+       diphthong with the preceding vowel, and as the consonant like English y: reiectus ( = rei
+       yectus) maior ( = mai yor), cuius ( = cui yus.) Otherwise it was usually a vowel.
+    -}
+    consonantalVowelsI :: Parser [SylPar] -- This needs more work to get it to run in the middle.
+    consonantalVowelsI = do
+      vowela <- choice $ map string vocales
+      cv <- string "i" <|> string "ī"
+      vowelb <- choice $ map string vocales
+      pure [Vowel vowela, Consonant cv, Vowel vowelb]
+           
+    vowels      = (choice $ map string vocales    ) >>= pure . (:[]) . Vowel
+    consonants  = (choice $ map string consonantes) >>= pure . (:[]) . Consonant
+    diphthongs  = (choice $ map string diphthongi ) >>= pure . (:[]) . Diphthong
+    stopLiquidy = (choice $ map string stopLiquids) >>= pure . (:[]) . StopLiquid
 
 textToSylpar :: [SylPar] -> [Text] -> [[SylPar]]
 textToSylpar sylpars texts = map mapF scans
@@ -131,7 +155,9 @@ sylparToSyllables sylpars = map (T.concat . map mapF) sylpars
     mapF (Diphthong  x) = x
     mapF (StopLiquid x) = x
 
-              
+syllablesToText :: [Text] -> Text
+syllablesToText ts = T.intercalate "-" ts
+
 sylparToText :: [] SylPar -> Text
 sylparToText xs = T.pack $ map mapF xs
   where
@@ -142,11 +168,18 @@ sylparToText xs = T.pack $ map mapF xs
 
 syllabizer2 :: Parser [Text]
 syllabizer2 = do
-  matched <- many1 $ choice [conVowelDip, stopLiquidVowelCons, stopLiquidVowel, conVowelCon, midConsonant, multiMidConsonant, dualVowel, vowelDip]
-  -- endOfInput
+  matched <- choice [ many1 $ choice [ multiMidConsonant, midConsonant, conVowelCon, vowelCon, conVowelDip
+                                     , stopLiquidVowelCons, stopLiquidVowel
+                                     , dualVowel, vowelDip, vOrD
+                                     ]
+                    ]
+  endOfInput
   pure $ join matched
 
   where
+    vowelCon :: Parser [Text]
+    vowelCon = string "VC" >>= pure . (:[])
+
     stopLiquidVowelCons :: Parser [Text]
     stopLiquidVowelCons = string "SVC" >>= pure . (:[])
 
@@ -161,13 +194,16 @@ syllabizer2 = do
       void $ string "C"
       vd <- vowelOrDip
       pure [T.append "C" vd]
-                  
+
     vowelDip :: Parser [Text]
     vowelDip = string "VD" >> pure ["V","D"]
 
     vowelOrDip :: Parser Text
     vowelOrDip = string "V" <|> string "D"
-               
+
+    vOrD :: Parser [Text]
+    vOrD = vowelOrDip >>= pure . (:[])
+
     dualVowel :: Parser [Text]
     dualVowel = string "VV" >> pure ["V","V"]
 
@@ -182,82 +218,6 @@ syllabizer2 = do
       pure [ T.append "V" $ T.init cs
            , "CV"
            ]
-                           
-       
-syllabizer :: Parser [Text]
-syllabizer = do
-  wheeee <- (many1 $ choice [pat1, conVowel, stopLiquidVowelCons, stopLiquidVowel, conVowelCon, conVowel, midConsonant, multiMidConsonant, dual])
-            >>= pure . join
-  endOfInput
-  pure wheeee
-  where
-    -- vowDip :: Parser Text
-    -- vowDip = vowels <|> diphthongs
-
-    pat1 :: Parser [Text]
-    pat1 = do slvc <- many1 stopLiquidVowel
-              pure $ join slvc
-
-    stopLiquidVowelCons :: Parser [Text]
-    stopLiquidVowelCons = do
-      stopLiquid <- choice $ map string stopLiquids
-      vowel <- vowels
-      consonant <- consonants
-      pure [T.concat [stopLiquid, vowel, consonant]]
-
-    stopLiquidVowel :: Parser [Text]
-    stopLiquidVowel = do
-      stopLiquid <- choice $ map string stopLiquids
-      vowel <- vowels
-      pure [T.append stopLiquid vowel]
-
-
-    conVowelCon :: Parser [Text]
-    conVowelCon = do cv <- conVowel >>= pure . T.concat
-                     consonant <- consonants
-                     pure [T.append cv consonant]
-
-    conVowel :: Parser [Text]
-    conVowel = do
-      consonant <- consonants
-      vowel <- vowels
-      pure [T.append consonant vowel]
-
-
-    dual :: Parser [Text]
-    dual = choice [vowelDip, dualVowel]
-    -- dipVowel = do vowel1 <- vowel
-    --               diphthong1 <- diphthong
-    --               pure [T.singleton vowel1, diphthong1]
-
-    vowelDip = do diphthong <- diphthongs
-                  vowel <- vowels
-                  pure [diphthong, vowel]
-
-    dualVowel = do vowel1 <- vowels
-                   vowel2 <- vowels
-                   pure [vowel1, vowel2]
-
-    vowels     = choice $ map string vocales
-    consonants = choice $ map string consonantes
-    diphthongs = choice $ map string diphthongi
-
-
-    midConsonant :: Parser [Text]
-    midConsonant =
-      do vowel1 <- vowels
-         consonant <- consonants
-         vowel2 <- vowels
-         pure [vowel1, T.append consonant vowel2]
-
-    multiMidConsonant :: Parser [Text]
-    multiMidConsonant =
-      do vowel1 <- vowels
-         consonantSequence <- many1 consonants
-         vowel2 <- vowels
-         pure [ T.append vowel1 (T.concat $ init consonantSequence)
-              , T.concat [last consonantSequence, vowel2]
-              ]
 
 
 
