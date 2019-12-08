@@ -98,6 +98,52 @@ data Paradigma
 instance Ord Paradigma where
   compare a b = casus a `compare` casus b
 
+
+{-
+see: http://dcc.dickinson.edu/grammar/latin/3rd-declension-pure-i-stems-m-f
+Third declension I-stem rules:
+
+  1. Pure i-stems:
+
+    a. Masculine and feminine parisyllabic (having the same number of syllables in the nominative and genitive singular)
+       nouns in -is and four in -er.
+
+    b. Neuters in -e, -al, and -ar.
+
+  2. Mixed i-stems, declined in the singular like consonant stems, the plural like i-stems.
+
+
+  3rd Declension: Pure I-stems, m. / f.
+  
+  66. Masculine and feminine parisyllabic nouns in -is form the nominative singular by adding s to
+      the stem. Four stems in bri- and tri- do not add s to form the nominative, but drop i and insert e
+      before r . These are imber, linter, ūter, venter.
+
+  Pure I-stem, N
+  3rd Declension: Pure I-stems, m. / f.
+  3rd Declension: Mixed I-stem
+  
+  68. In neuters the nominative is the same as the stem, with final i changed to e (mare, stem
+      mari-). But most nouns1 in which the i of the stem is preceded by -āl- or -ār- lose the final
+      vowel and shorten the preceding ā.
+  
+  animăl, stem animāli-2
+  
+  a. Neuters in -e, -al, and -ar have -ī in the ablative singular, -ium in the genitive plural, and
+     -ia in the nominative and accusative plural.
+  
+  animal, animālī, -ia, -ium
+
+-}
+
+
+
+
+
+
+
+
+                
 labefaceApex :: Text -> Text
 labefaceApex input = T.map mapF input
   where

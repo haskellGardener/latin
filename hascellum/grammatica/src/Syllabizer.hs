@@ -59,17 +59,101 @@ import Control.Applicative ((<|>))
 import Data.Either (isRight, fromRight)
 
 -- End of imports ---------------------------------------------------------------------------------------------------------------------------------------
+{-
+ see https://en.wikipedia.org/wiki/Latin_spelling_and_pronunciation
+
+
+Syllable
+
+To determine stress, syllable weight of the penult must be determined. To determine syllable weight,
+words must be broken up into syllables.[57] In the following examples, syllable structure is
+represented using these symbols: C (a consonant), K (a stop), R (a liquid), and V (a short vowel),
+VV (a long vowel or diphthong).
+
+Nucleus
+
+Every short vowel, long vowel, or diphthong belongs to a single syllable. This vowel forms the
+syllable nucleus. Thus magistrārum has four syllables, one for every vowel (a i ā u: V V VV V),
+aereus has three (ae e u: VV V V), tuō has two (u ō: V VV), and cui has one (ui: VV).[58]
+
+Onset and coda
+
+A consonant before a vowel, or a consonant cluster at the beginning of a word, is placed in the same
+syllable as the following vowel. This consonant or consonant cluster forms the syllable onset.[58]
+
+    fēminae /feː.mi.nae̯/ (CVV.CV.CVV)
+    vidēre /wi.deː.re/ (CV.CVV.CV)
+    puerō /pu.e.roː/ (CV.V.CVV)
+    beātae /be.aː.tae̯/ (CV.VV.CVV)
+    graviter /ɡra.wi.ter/ (CCV.CV.CVC)
+    strātum /straː.tum/ (CCCVV.CVC)
+
+After this, if there is an additional consonant inside the word, it is placed at the end of the
+syllable. This consonant is the syllable coda. Thus if a consonant cluster of two consonants occurs
+between vowels, they are broken up between syllables: one goes with the syllable before, the other
+with the syllable after.[59]
+
+    puella /pu.el.la/ (CV.VC.CV)
+    supersum /su.per.sum/ (CV.CVC.CVC)
+    coāctus /ko.aːk.tus/ (CV.VVC.CVC)
+    intellēxit /in.tel.leːk.sit/ (VC.CVC.CVVC.CVC)
+
+There are two exceptions. A consonant cluster of a stop p t c b d g followed by a liquid l r between
+vowels usually goes to the syllable after it, although it is also sometimes broken up like other
+consonant clusters.[59]
+
+    volucris /wo.lu.kris/ or /wo.luk.ris/ (CV.CV.KRVC or CV.CVK.RVC)
+
+Heavy and light syllables
+
+As shown in the examples above, Latin syllables have a variety of possible structures. Here are some
+of them. The first four examples are light syllables, and the last six are heavy. All syllables have
+at least one V (vowel). A syllable is heavy if it has another V or a VC after the first V. In the
+table below, the extra V or VC is Upper, indicating that it makes the syllable heavy.
+
+      v
+    c v
+  c c v
+c c c v
+    c v V
+    c v C
+    c v V C
+      v V
+      v C
+      v V C
+
+Thus, a syllable is heavy if it ends in a long vowel or diphthong, a short vowel and a consonant, a
+long vowel and a consonant, or a diphthong and a consonant. Syllables ending in a diphthong and
+consonant are rare in Classical Latin.
+
+The syllable onset has no relationship to syllable weight; both heavy and light syllables can have
+no onset or an onset of one, two, or three consonants.
+
+In Latin a syllable that is heavy because it ends in a long vowel or diphthong is traditionally
+called syllaba nātūrā longa ('syllable long by nature'), and a syllable that is heavy because it
+ends in a consonant is called positiōne longa ('long by position'). These terms are translations of
+Greek συλλαβὴ μακρά φύσει (syllabḕ makrá phýsei = 'syllable long by nature') and μακρὰ θέσει (makrà
+thései = 'long by proposition'), respectively; therefore positiōne should not be mistaken for
+implying a syllable "is long because of its position/place in a word" but rather "is treated as
+'long' by convention". This article uses the words heavy and light for syllables, and long and short
+for vowels since the two are not the same.[59]
+
+ -}
 
 consonantes :: [] Text -- cōnsonāns cōnsonantēs f
 consonantes = [ "qu", "ch", "ph", "th"
               , "b", "c", "d", "f", "g", "h", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "x", "y", "z" -- , "i" -- requires backtracking.
               ]
+           ++ [ "QU", "CH", "PH", "TH"
+              , "B", "C", "D", "F", "G", "H", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "X", "Y", "Z"
+              ]
 
 vocales :: [] Text -- vōcālis vōcālēs f
-vocales = ["ā", "ē", "ī", "ō", "ū", "a", "e", "i", "o", "u", "y"]
+vocales = ["ā", "ē", "ī", "ō", "ū", "a", "e", "i", "o", "u", "y", "ă", "ĕ", "ĭ", "ŏ", "ŭ", "y̆"]
+       ++ ["Ā", "Ē", "Ī", "Ō", "Ū", "A", "E", "I", "O", "U", "Y", "Ă", "Ĕ", "Ĭ", "Ŏ", "Ŭ", "Y̆"]
 
 diphthongi :: [] Text -- diphthongus diphthongī f
-diphthongi = ["ae", "au", "ei", "eu", "oe", "ui"]
+diphthongi = ["ae", "au", "ei", "eu" {- sometimes: see deus -}, "oe", "ui"]
 
 liquids :: [] Text
 liquids = ["l", "r"]
@@ -106,7 +190,8 @@ data SylPar = Vowel Text
 
 tokenIzer :: Parser [SylPar]
 tokenIzer = do
-  tokens <- (do early <- consonantalVowels
+  tokens <- deus <|>
+            (do early <- consonantalVowels
                 tokens' <- tokes
                 pure $  (early:[]) ++ tokens'
             ) <|> tokes
@@ -133,11 +218,12 @@ tokenIzer = do
       cv <- string "i" <|> string "ī"
       vowelb <- choice $ map string vocales
       pure [Vowel vowela, Consonant cv, Vowel vowelb]
-           
+
     vowels      = (choice $ map string vocales    ) >>= pure . (:[]) . Vowel
     consonants  = (choice $ map string consonantes) >>= pure . (:[]) . Consonant
     diphthongs  = (choice $ map string diphthongi ) >>= pure . (:[]) . Diphthong
     stopLiquidy = (choice $ map string stopLiquids) >>= pure . (:[]) . StopLiquid
+    deus = string "deus" >> pure [[Consonant "d", Vowel "e", Vowel "u", Consonant "s"]]
 
 textToSylpar :: [SylPar] -> [Text] -> [[SylPar]]
 textToSylpar sylpars texts = map mapF scans
@@ -152,7 +238,7 @@ sylparToSyllables sylpars = map (T.concat . map mapF) sylpars
   where
     mapF (Vowel      x) = x
     mapF (Consonant  x) = x
-    mapF (Diphthong  x) = x
+    mapF (Diphthong  x) = x -- Maybe recognize hiatus as well. Very tricky. e.g. 'deus' which is bisyllabe per diaersin
     mapF (StopLiquid x) = x
 
 syllablesToText :: [Text] -> Text
@@ -168,18 +254,39 @@ sylparToText xs = T.pack $ map mapF xs
 
 syllabizer2 :: Parser [Text]
 syllabizer2 = do
-  matched <- choice [ many1 $ choice [ cvcv, multiMidConsonant, midConsonant, conVowelCon, vowelCon, conVowelDip
-                                     , stopLiquidVowelCons, stopLiquidVowel
-                                     , dualVowel, vowelDip, vOrD
+  matched <- choice [ many1 $ choice [ cvcv
+                                     , multiMidConsonant
+                                     , midConsonant
+                                     , midConsonant2
+
+                                     , cvccvcccvc
+                                     , vcsvcvcvc
+
+                                     , conVowelCon
+
+                                     , vowelCon
+                                     , conVowelDip
+                                     , stopLiquidVowelCons
+                                     , stopLiquidVowel
+                                     , dualVowel
+                                     , vowelDip
+                                     , vOrD
                                      ]
                     ]
   endOfInput
   pure $ join matched
 
   where
+    cvccvcccvc :: Parser [Text]
+    cvccvcccvc = string "CVCCVCCCVC" >> pure ["CVC","CVCC","CVC"]
+
+
+    vcsvcvcvc :: Parser [Text]
+    vcsvcvcvc = string "VCSVCVCVC" >> pure ["VC","SV","CV","CVC"]
+
     cvcv :: Parser [Text]
     cvcv = string "CVCV" >> pure ["CV", "CV"]
-    
+
     vowelCon :: Parser [Text]
     vowelCon = string "VC" >>= pure . (:[])
 
@@ -213,6 +320,9 @@ syllabizer2 = do
     midConsonant :: Parser [Text]
     midConsonant = string "VCV" >> pure ["V", "CV"]
 
+    midConsonant2 :: Parser [Text]
+    midConsonant2 = string "VCCCV" >> pure ["VCC", "CV"]
+
     multiMidConsonant :: Parser [Text]
     multiMidConsonant = do
       void $ string "V"
@@ -228,6 +338,7 @@ syllabizer2 = do
 {-
 pa-ter
 mī-li-tēs
+MĪLITĒS
 in-iū-ri-a
 dī-vi-dō
 
