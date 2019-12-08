@@ -168,7 +168,7 @@ sylparToText xs = T.pack $ map mapF xs
 
 syllabizer2 :: Parser [Text]
 syllabizer2 = do
-  matched <- choice [ many1 $ choice [ multiMidConsonant, midConsonant, conVowelCon, vowelCon, conVowelDip
+  matched <- choice [ many1 $ choice [ cvcv, multiMidConsonant, midConsonant, conVowelCon, vowelCon, conVowelDip
                                      , stopLiquidVowelCons, stopLiquidVowel
                                      , dualVowel, vowelDip, vOrD
                                      ]
@@ -177,6 +177,9 @@ syllabizer2 = do
   pure $ join matched
 
   where
+    cvcv :: Parser [Text]
+    cvcv = string "CVCV" >> pure ["CV", "CV"]
+    
     vowelCon :: Parser [Text]
     vowelCon = string "VC" >>= pure . (:[])
 
