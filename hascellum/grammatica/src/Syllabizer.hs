@@ -205,7 +205,7 @@ tokenIzer = do
   pure $ join tokens
   where
     tokes :: Parser [[SylPar]]
-    tokes = many1 $ choice [eus, eum, quae, qua, que, qui, quo, quu, diphthongs, consonantalVowelsI, vowels, stopLiquidy, consonants]
+    tokes = many1 $ choice [chi, eus, eum, quae, qua, que, qui, quo, quu, diphthongs, consonantalVowelsI, vowels, stopLiquidy, consonants]
 
     consonantalVowels :: Parser [SylPar]
     consonantalVowels = do
@@ -241,6 +241,7 @@ tokenIzer = do
     auri = string "auri" >> pure [Vowel "au", Absolute "ri"]
     auto = string "auto" >> pure [Absolute "au", Absolute "to"]
     aux  = string "aux"  >> pure [Absolute "aux"]
+    chi  = string "chi"  >> pure [Absolute "chi"]
     au   = string "au"   >> pure [Vowel "au"]
 
     alx  = string "alx"  >> pure [[Absolute "alx"]]
@@ -276,48 +277,85 @@ sylparToText xs = T.pack $ map mapF xs
 
 syllabizer2 :: Parser [Text]
 syllabizer2 = do
-  matched <- choice [ many1 $ choice [ absolute
-                                     , vac
-                                     , endCvvc
-                                     , vccvcvcvvc
-                                     , vccvcvccvc
-                                     , vccvcvcvv
-                                     , vcccvccvv
-                                     , vcvccvcvc
-                                     , vcsvcvcvc
-                                     , vsvcvcvvc
-                                     , vcccvccvc
-                                     , vccvcccvv
-                                     , vcvcvvc
-                                     , vcvcdc
-                                     , cvcvc
-                                     , vcvcc
-                                     , vccdc
-                                     , dcvcc
-                                     , dccvv
-                                     , vcsd
-                                     , vcvc
-                                     , cvcv
-                                     , vcc
-  
-                                     , conVowelCon
-                                     , vowelCon
-                                     , conVowelDip
-                                     , stopLiquidVowelCons
-                                     , stopLiquidVowel
-                                     , vOrD
-                                     ]
-                    ]
-  endOfInput
-  pure $ join matched
+  matched <- (do x <- many1 general
+                 endOfInput
+                 pure x
+             ) <|>
+             (do x <- many1 general2
+                 endOfInput
+                 pure x
+             )
 
+  pure $ join matched
   where
+    general = choice [ absolute
+                 --    , vac
+                     , endCvvc
+                     , vccvcvcvvc
+                     , vccvcvccvc
+                     , vccvcvcvv
+                     , vcccvccvv
+                     , vcvccvcvc
+                     , vcsvcvcvc
+                     , vsvcvcvvc
+                     , vcccvccvc
+                     , vccvcccvv
+                     , vccvcvcc -- Must have for accidens
+                     , vcvcvvc
+                     , vcvcdc
+                     , cvcvc
+                     , vcvcc
+                     , vccdc
+                     , dcvcc
+                     , dccvv
+                     , vcsd
+                     , vcvc
+                     , cvcv
+                     , conVowelCon
+                     , vowelCon
+                     , conVowelDip
+--                     , stopLiquidVowelCons
+                     , stopLiquidVowel
+                     , vOrD
+                     ]
+
+    general2 = choice [ absolute
+                      , vac
+                      , endCvvc
+                      , vccvcvcvvc
+                      , vccvcvccvc
+                      , vccvcvcvv
+                      , vcccvccvv
+                      , vcvccvcvc
+                      , vcsvcvcvc
+                      , vsvcvcvvc
+                      , vcccvccvc
+                      , vccvcccvv
+                      , vcvcvvc
+                      , vcvcdc
+                      , cvcvc
+                      , vcvcc
+                      , vccdc
+                      , dcvcc
+                      , dccvv
+                      , vcsd
+                      , vcvc
+                      , cvcv
+                      , vcc -- This is a mess, and should only apply as a last resort.
+                      , conVowelCon
+                      , vowelCon
+                      , conVowelDip
+                      , stopLiquidVowelCons
+                      , stopLiquidVowel
+                      , vOrD
+                      ]
+
     absolute :: Parser [Text]
     absolute = string "A" >> pure ["A"]
 
     endCvvc = string "CVVC" >> pure ["CV","VC"]
 --    vccvcv    = string    "VCCVCV" >> pure ["VC","CV","CV"]       -- anteloquium /an.teˈlo.kʷi.um/
-               
+
     vccvcvcvvc    = string    "VCCVCVCVVC" >> pure ["VC","CV","CV","CV","VC"]       -- anteloquium /an.teˈlo.kʷi.um/
     vccvcvccvc    = string    "VCCVCVCCVC" >> pure ["VC","CV","CVC","CVC"]          -- architectus
     vsvcvcvvc     = string     "VSVCVCVVC" >> pure ["V","SV","CV","CV","VC"]        -- acrocorium
@@ -328,7 +366,7 @@ syllabizer2 = do
     vcccvccvv     = string     "VCCCVCCVV" >> pure ["VC","CCVC","CV","V"]           -- abscessio
     vcccvccvc     = string     "VCCCVCCVC" >> pure ["VC","VCVC","CVC"]              -- afflictor
 --    vcvccvcv      = string      "VCVCCVCV" >> pure ["VC","VC","CV","CV"]
---    vccvcvcc      = string      "VCCVCVCC" >> pure ["VC","CV","CVCC"]               -- accidens
+    vccvcvcc      = string      "VCCVCVCC" >> pure ["VC","CV","CVCC"]               -- accidens
 --    vcccvccv      = string      "VCCCVCCV" >> pure ["VC","CCVC","CV"]               -- abscissa
 --    vacvccdc      = string      "VACVCCDC" >> pure ["V","A","CVC","CDC"]            -- aquilunguis
     vcvcvvc       = string       "VCVCVVC" >> pure ["V","CV","CV","VC"]             -- abigeus
