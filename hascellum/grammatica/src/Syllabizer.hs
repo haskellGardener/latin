@@ -278,14 +278,9 @@ syllabizer2 :: Parser [Text]
 syllabizer2 = do
   matched <- choice [ many1 $ choice [ absolute
                                      , vac
-                                     , cvcvcvvc -- ending
-                                     , vccvcvccvcvvc
-                                     , vccvcvccvvc
-                                     , vcvvcvcvvc
+                                     , endCvvc
                                      , vccvcvcvvc
                                      , vccvcvccvc
-                                     , cvccvcccvc
-                                     , vccvsvcvvc
                                      , vccvcvcvv
                                      , vcccvccvv
                                      , vcvccvcvc
@@ -293,24 +288,9 @@ syllabizer2 = do
                                      , vsvcvcvvc
                                      , vcccvccvc
                                      , vccvcccvv
-                                     , vccvcvvc
-                                     , vcccvccv
-                                     , vcvccvvc
-                                     , vcsvcvvc
-                                     , vcvccvcv
-                                     , vccvcvcc
-                                     , vacvccdc
-                                     , vcvccvc
                                      , vcvcvvc
-                                     , vsvcvvc
-                                     , vccdccv
-                                     , vsvcvc
                                      , vcvcdc
-                                     , vcdcvc
-                                     , vcccvc
-                                     , vvccv
                                      , cvcvc
-                                     , vccvc
                                      , vcvcc
                                      , vccdc
                                      , dcvcc
@@ -319,6 +299,7 @@ syllabizer2 = do
                                      , vcvc
                                      , cvcv
                                      , vcc
+  
                                      , conVowelCon
                                      , vowelCon
                                      , conVowelDip
@@ -334,13 +315,11 @@ syllabizer2 = do
     absolute :: Parser [Text]
     absolute = string "A" >> pure ["A"]
 
-    vccvcvccvcvvc = string "VCCVCVCCVCVVC" >> pure ["VC","CV","CVC","CVC","V","VC"] -- armamentarium
-    vccvcvccvvc   = string   "VCCVCVCCVVC" >> pure ["VC","CV","CVC","CV","VC"]      -- antependium
-    vcvvcvcvvc    = string    "VCVVCVCVVC" >> pure ["V","CV","VCV","CV","VC"]       -- abietārius
-    vccvsvcvvc    = string    "VCCVSVCVVC" >> pure ["VC","CV","SV","CV","VC"]       -- antebrachium /an.teˈbra.kʰi.um/,
+    endCvvc = string "CVVC" >> pure ["CV","VC"]
+--    vccvcv    = string    "VCCVCV" >> pure ["VC","CV","CV"]       -- anteloquium /an.teˈlo.kʷi.um/
+               
     vccvcvcvvc    = string    "VCCVCVCVVC" >> pure ["VC","CV","CV","CV","VC"]       -- anteloquium /an.teˈlo.kʷi.um/
     vccvcvccvc    = string    "VCCVCVCCVC" >> pure ["VC","CV","CVC","CVC"]          -- architectus
-    cvccvcccvc    = string    "CVCCVCCCVC" >> pure ["CVC","CVCC","CVC"]
     vsvcvcvvc     = string     "VSVCVCVVC" >> pure ["V","SV","CV","CV","VC"]        -- acrocorium
     vcvccvcvc     = string     "VCVCCVCVC" >> pure ["V","CVC","CV","CVC"]           -- abortivum a.borˈtiː.wum/
     vcsvcvcvc     = string     "VCSVCVCVC" >> pure ["VC","SV","CV","CVC"]
@@ -348,25 +327,20 @@ syllabizer2 = do
     vccvcccvv     = string     "VCCVCCCVV" >> pure ["VC","CVCC","CV","V"]           -- assumptio
     vcccvccvv     = string     "VCCCVCCVV" >> pure ["VC","CCVC","CV","V"]           -- abscessio
     vcccvccvc     = string     "VCCCVCCVC" >> pure ["VC","VCVC","CVC"]              -- afflictor
-    vcvccvvc      = string      "VCVCCVVC" >> pure ["V","CVC","CV","VC"]            -- amussium /aˈmus.si.um/
-    vcvccvcv      = string      "VCVCCVCV" >> pure ["VC","VC","CV","CV"]
-    vcsvcvvc      = string      "VCSVCVVC" >> pure ["VC","SV","CV","VC"]            -- asclepion
-    vccvcvvc      = string      "VCCVCVVC" >> pure ["VC","CV","CV","VC"]            -- abluvium /abˈlu.wi.um/
-    vccvcvcc      = string      "VCCVCVCC" >> pure ["VC","CV","CVCC"]               -- accidens
-    vcccvccv      = string      "VCCCVCCV" >> pure ["VC","CCVC","CV"]               -- abscissa
-    vacvccdc      = string      "VACVCCDC" >> pure ["V","A","CVC","CDC"]            -- aquilunguis
-    cvcvcvvc      = string      "CVCVCVVC" >> pure ["CV","CV","CV","VC"]            -- an ending
-    vsvcvvc       = string       "VSVCVVC" >> pure ["V","SV","CV","VC"]             -- abluvium /abˈlu.wi.um/
+--    vcvccvcv      = string      "VCVCCVCV" >> pure ["VC","VC","CV","CV"]
+--    vccvcvcc      = string      "VCCVCVCC" >> pure ["VC","CV","CVCC"]               -- accidens
+--    vcccvccv      = string      "VCCCVCCV" >> pure ["VC","CCVC","CV"]               -- abscissa
+--    vacvccdc      = string      "VACVCCDC" >> pure ["V","A","CVC","CDC"]            -- aquilunguis
     vcvcvvc       = string       "VCVCVVC" >> pure ["V","CV","CV","VC"]             -- abigeus
-    vcvccvc       = string       "VCVCCVC" >> pure ["VC","VC","CVC"]                -- abactor
-    vccdccv       = string       "VCCDCCV" >> pure ["VC","CDC","CV"]                -- anguilla /anˈɡʷiːl.la/
-    vsvcvc        = string        "VSVCVC" >> pure ["V","SV","CVC"]                 -- ablātor /abˈlaː.tor/
+--    vcvccvc       = string       "VCVCCVC" >> pure ["VC","VC","CVC"]                -- abactor
+--    vccdccv       = string       "VCCDCCV" >> pure ["VC","CDC","CV"]                -- anguilla /anˈɡʷiːl.la/
+--    vsvcvc        = string        "VSVCVC" >> pure ["V","SV","CVC"]                 -- ablātor /abˈlaː.tor/
     vcvcdc        = string        "VCVCDC" >> pure ["V","CV","CDC"]                 -- aculeus
-    vcdcvc        = string        "VCDCVC" >> pure ["V","CD","CVC"]                 -- acoetis
-    vcccvc        = string        "VCCCVC" >> pure ["VC","CCVC"]                    -- anthrax
-    vvccv         = string         "VVCCV" >> pure ["V","VC","CV"]                  -- aorta
+--    vcdcvc        = string        "VCDCVC" >> pure ["V","CD","CVC"]                 -- acoetis
+--    vcccvc        = string        "VCCCVC" >> pure ["VC","CCVC"]                    -- anthrax
+--    vvccv         = string         "VVCCV" >> pure ["V","VC","CV"]                  -- aorta
     vcvcc         = string         "VCVCC" >> pure ["V","CVCC"]                     -- amans /ˈa.mans/
-    vccvc         = string         "VCCVC" >> pure ["VC","CVC"]                     -- abbas
+--    vccvc         = string         "VCCVC" >> pure ["VC","CVC"]                     -- abbas
     vccdc         = string         "VCCDC" >> pure ["VC","CDC"]                     -- anguis
     dcvcc         = string         "DCVCC" >> pure ["D","CVCC"]                     -- auceps
     dccvv         = string         "DCCVV" >> pure ["DC","CV","V"]                  -- auctio
