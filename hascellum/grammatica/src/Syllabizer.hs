@@ -184,14 +184,15 @@ textToSylparO t ts = textToSylpar (outerToken t) ts
 
 data SylPar = Vowel Text
             | Diphthong Text
+            | Absolute Text
             | Consonant Text
             | StopLiquid Text
               deriving (Show)
 
 tokenIzer :: Parser [SylPar]
 tokenIzer = do
-  tokens <- deus <|>
-            (do early <- consonantalVowels
+  tokens <- abigeus <|> deus <|> aculeus <|> alveus <|> alx <|>
+            (do early <- consonantalVowels <|> ab
                 tokens' <- tokes
                 pure $  (early:[]) ++ tokens'
             ) <|> tokes
@@ -224,6 +225,12 @@ tokenIzer = do
     diphthongs  = (choice $ map string diphthongi ) >>= pure . (:[]) . Diphthong
     stopLiquidy = (choice $ map string stopLiquids) >>= pure . (:[]) . StopLiquid
     deus = string "deus" >> pure [[Consonant "d", Vowel "e", Vowel "u", Consonant "s"]]
+    abigeus = string "abigeus" >> pure [[Vowel "a", Consonant "b", Vowel "i", Consonant "g", Vowel "e", Vowel "u", Consonant "s"]]
+    aculeus = string "aculeus" >> pure [[Vowel "a", Consonant "c", Vowel "u", Consonant "l", Vowel "e", Vowel "u", Consonant "s"]]
+    alveus = string "alveus" >> pure [[Vowel "a", Consonant "l", Consonant "v", Vowel "e", Vowel "u", Consonant "s"]]
+    -- ab is intolerable as it could be a-b... or ab-... The word after 'a' or 'ab' may be an actual word elsewhere.
+    ab = string "ab" >> pure [Absolute "ab"]
+    alx = string "alx" >> pure [[Absolute "alx"]]
 
 textToSylpar :: [SylPar] -> [Text] -> [[SylPar]]
 textToSylpar sylpars texts = map mapF scans
@@ -239,6 +246,7 @@ sylparToSyllables sylpars = map (T.concat . map mapF) sylpars
     mapF (Vowel      x) = x
     mapF (Consonant  x) = x
     mapF (Diphthong  x) = x -- Maybe recognize hiatus as well. Very tricky. e.g. 'deus' which is bisyllabe per diaersin
+    mapF (Absolute   x) = x -- used for prefixes and suffixes that should not be treated as part of the rest.
     mapF (StopLiquid x) = x
 
 syllablesToText :: [Text] -> Text
@@ -250,20 +258,50 @@ sylparToText xs = T.pack $ map mapF xs
     mapF (Vowel      _) = 'V'
     mapF (Consonant  _) = 'C'
     mapF (Diphthong  _) = 'D'
+    mapF (Absolute   _) = 'A'
     mapF (StopLiquid _) = 'S'
 
 syllabizer2 :: Parser [Text]
 syllabizer2 = do
-  matched <- choice [ many1 $ choice [ cvcv
+  matched <- choice [ many1 $ choice [ absolute
+                                    -- , vccvcvcvvccvcv
+                                     , vcvcvcvcvvc
+                                     , vcvvcvcvvc
+                                     , vccvcvcvvc
+                                     , vccvcvccvc
+                                     , cvccvcccvc
+                                     , vccvsvcvvc
+                                     , vccvcvcvv
+                                     , vcccvccvv
+                                     , vcvccvcvc
+                                     , vcsvcvcvc
+                                     , vsvcvcvvc
+                                     , vcccvccvc
+                                     , vccvcvvc
+                                     , vcccvccv
+                                     , vcvccvvc
+                                     , vcvccvcv
+                                     , vccvcvcc
+                                     , vcvccvc
+                                     , vcvcvvc
+                                     , vsvcvvc
+                                     , vccdccv
+                                     , vsvcvc
+                                     , vcvcdc
+                                     , vcdcvc
+                                     , cvcvc
+                                     , vccvc
+                                     , vcvcc
+                                     , vccdc
+                                     , vcsd
+                                     , vcvc
+                                     , cvcv
                                      , multiMidConsonant
                                      , midConsonant
                                      , midConsonant2
 
-                                     , cvccvcccvc
-                                     , vcsvcvcvc
-
                                      , conVowelCon
-
+                                     , cvcv
                                      , vowelCon
                                      , conVowelDip
                                      , stopLiquidVowelCons
@@ -271,18 +309,108 @@ syllabizer2 = do
                                      , dualVowel
                                      , vowelDip
                                      , vOrD
+
                                      ]
                     ]
   endOfInput
   pure $ join matched
 
   where
+    absolute :: Parser [Text]
+    absolute = string "A" >> pure ["A"]
+
+    -- vccvcvcvvccvcv :: Parser [Text]
+    -- vccvcvcvvccvcv = string "VCCVCVCVVCCVCV" >> pure ["VC","CV","CV","CV","VC","CV","CV"] -- ambulatiuncula /am.bu.laː.tiˈun.ku.la/,
+               
+    vcvcvcvcvvc :: Parser [Text]
+    vcvcvcvcvvc = string "VCVCVCVCVVC" >> pure ["V","CV","CV","CV","CV","VC"] -- "abecedarius"
+
+    vccvcvcvvc :: Parser [Text]
+    vccvcvcvvc = string   "VCCVCVCVVC" >> pure ["VC","CV","CV","CV","VC"] -- anteloquium /an.teˈlo.kʷi.um/
+                 
+    vccvcvccvc :: Parser [Text]
+    vccvcvccvc = string   "VCCVCVCCVC" >> pure ["VC","CV","CVC","CVC"] -- "architectus"
+
+    vcvvcvcvvc :: Parser [Text]
+    vcvvcvcvvc = string   "VCVVCVCVVC" >> pure ["V","CV","VCV","CV","VC"] -- "abietārius"
+
+    vccvsvcvvc :: Parser [Text]
+    vccvsvcvvc = string   "VCCVSVCVVC" >> pure ["VC","CV","SV","CV","VC"] -- antebrachium /an.teˈbra.kʰi.um/,
+
+    vcccvccvv :: Parser [Text]
+    vcccvccvv = string     "VCCCVCCVV" >> pure ["VC","CCVC","CV","V"] -- abscessio
+
+    vccvcvcvv :: Parser [Text]
+    vccvcvcvv = string     "VCCVCVCVV" >> pure ["VC", "CV", "CV", "CV", "V"]  -- "abdicatio"
+
+    vsvcvcvvc :: Parser [Text]
+    vsvcvcvvc = string     "VSVCVCVVC" >> pure ["V","SV","CV","CV","VC"] -- acrocorium
+
+    vcvccvcvc :: Parser [Text]
+    vcvccvcvc = string     "VCVCCVCVC" >> pure ["V","CVC","CV","CVC"] -- abortivum a.borˈtiː.wum/
+
+    vcccvccvc :: Parser [Text]
+    vcccvccvc = string     "VCCCVCCVC" >> pure ["VC","VCVC","CVC"] -- afflictor
+
+    vccvcvcc :: Parser [Text]
+    vccvcvcc = string       "VCCVCVCC" >> pure ["VC","CV","CVCC"] -- accidens
+
+    vcccvccv :: Parser [Text]
+    vcccvccv = string       "VCCCVCCV" >> pure ["VC","CCVC","CV"] -- abscissa
+
+    vccvcvvc :: Parser [Text]
+    vccvcvvc = string       "VCCVCVVC" >> pure ["VC", "CV", "CV", "VC"] -- abluvium /abˈlu.wi.um/
+
+    vcvccvcv :: Parser [Text]
+    vcvccvcv = string       "VCVCCVCV" >> pure ["VC","VC","CV","CV"]
+
+    vcvccvvc :: Parser [Text]
+    vcvccvvc = string       "VCVCCVVC" >> pure ["V","CVC","CV","VC"] -- amussium /aˈmus.si.um/
+
+
+    vcvcvvc :: Parser [Text]
+    vcvcvvc = string         "VCVCVVC" >> pure ["V", "CV", "CV", "VC"] -- abigeus
+
+
+    vsvcvvc :: Parser [Text]
+    vsvcvvc = string         "VSVCVVC" >> pure ["V", "SV", "CV", "VC"] -- abluvium /abˈlu.wi.um/
+
+    vccdccv :: Parser [Text]
+    vccdccv = string         "VCCDCCV" >> pure ["VC","CDC","CV"] -- anguilla /anˈɡʷiːl.la/
+    
+    vccdc :: Parser [Text]
+    vccdc = string "VCCDC" >> pure ["VC","CDC"] -- anguis
+
+    vcdcvc = string "VCDCVC" >> pure ["V","CD","CVC"] -- acoetis
+
+    vcvcdc = string "VCVCDC" >> pure ["V","CV", "CDC"] -- aculeus
+
+    vsvcvc :: Parser [Text]
+    vsvcvc = string "VSVCVC" >> pure ["V","SV","CVC"] -- ablātor /abˈlaː.tor/
+
+    vccvc :: Parser [Text]
+    vccvc = string "VCCVC" >> pure ["VC","CVC"] -- "abbas"
+
+    vcvc :: Parser [Text]
+    vcvc = string "VCVC" >> pure ["VC","VC"] -- "acor"
+
+    cvcvc :: Parser [Text]
+    cvcvc = string "CVCVC" >> pure ["CV","CVC"] -- "pater"
+
     cvccvcccvc :: Parser [Text]
     cvccvcccvc = string "CVCCVCCCVC" >> pure ["CVC","CVCC","CVC"]
 
-
     vcsvcvcvc :: Parser [Text]
     vcsvcvcvc = string "VCSVCVCVC" >> pure ["VC","SV","CV","CVC"]
+
+    vcvccvc :: Parser [Text]
+    vcvccvc = string "VCVCCVC" >> pure ["VC","VC","CVC"] -- "abactor"
+
+    vcvcc :: Parser [Text]
+    vcvcc = string "VCVCC" >> pure ["V","CVCC"] -- amans /ˈa.mans/
+
+    vcsd :: Parser [Text]
+    vcsd = string "VCSD" >> pure ["VC", "SD"] -- ancrae /ˈan.krae̯/
 
     cvcv :: Parser [Text]
     cvcv = string "CVCV" >> pure ["CV", "CV"]

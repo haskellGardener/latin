@@ -31,6 +31,7 @@ library
   exposed-modules:   Lib
                    , Nomen
                    , Syllabizer
+                   , List
   build-depends:     base >= 4.8 && < 5
                    , text
                    , attoparsec
