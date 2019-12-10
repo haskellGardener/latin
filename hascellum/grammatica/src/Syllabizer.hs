@@ -191,7 +191,7 @@ data SylPar = Vowel Text
 
 tokenIzer :: Parser [SylPar]
 tokenIzer = do
-  tokens <- abigeus <|> deus <|> aculeus <|> alveus <|> alx <|>
+  tokens <- alx <|>
             (do early <- consonantalVowels <|> ab
                 tokens' <- tokes
                 pure $  (early:[]) ++ tokens'
@@ -201,7 +201,7 @@ tokenIzer = do
   pure $ join tokens
   where
     tokes :: Parser [[SylPar]]
-    tokes = many1 $ choice [diphthongs, consonantalVowelsI, vowels, stopLiquidy, consonants]
+    tokes = many1 $ choice [eus, eum, quae, qua, que, qui, quo, quu, diphthongs, consonantalVowelsI, vowels, stopLiquidy, consonants]
 
     consonantalVowels :: Parser [SylPar]
     consonantalVowels = do
@@ -224,13 +224,21 @@ tokenIzer = do
     consonants  = (choice $ map string consonantes) >>= pure . (:[]) . Consonant
     diphthongs  = (choice $ map string diphthongi ) >>= pure . (:[]) . Diphthong
     stopLiquidy = (choice $ map string stopLiquids) >>= pure . (:[]) . StopLiquid
-    deus = string "deus" >> pure [[Consonant "d", Vowel "e", Vowel "u", Consonant "s"]]
-    abigeus = string "abigeus" >> pure [[Vowel "a", Consonant "b", Vowel "i", Consonant "g", Vowel "e", Vowel "u", Consonant "s"]]
-    aculeus = string "aculeus" >> pure [[Vowel "a", Consonant "c", Vowel "u", Consonant "l", Vowel "e", Vowel "u", Consonant "s"]]
-    alveus = string "alveus" >> pure [[Vowel "a", Consonant "l", Consonant "v", Vowel "e", Vowel "u", Consonant "s"]]
+    -- deus = string "deus" >> pure [[Consonant "d", Vowel "e", Vowel "u", Consonant "s"]]
+    -- abigeus = string "abigeus" >> pure [[Vowel "a", Consonant "b", Vowel "i", Consonant "g", Vowel "e", Vowel "u", Consonant "s"]]
+    -- aculeus = string "aculeus" >> pure [[Vowel "a", Consonant "c", Vowel "u", Consonant "l", Vowel "e", Vowel "u", Consonant "s"]]
+    -- alveus = string "alveus" >> pure [[Vowel "a", Consonant "l", Consonant "v", Vowel "e", Vowel "u", Consonant "s"]]
     -- ab is intolerable as it could be a-b... or ab-... The word after 'a' or 'ab' may be an actual word elsewhere.
     ab = string "ab" >> pure [Absolute "ab"]
     alx = string "alx" >> pure [[Absolute "alx"]]
+    quu = string "quu" >> pure [Absolute "quu"]
+    quo = string "quo" >> pure [Absolute "quo"]
+    qui = string "qui" >> pure [Absolute "qui"]
+    que = string "que" >> pure [Absolute "que"]
+    qua = string "qua" >> pure [Absolute "qua"]
+    quae = string "quae" >> pure [Absolute "quae"]
+    eum = string "eum" >> pure [Vowel "e", Absolute "um"]
+    eus = string "eus" >> pure [Vowel "e", Absolute "us"]
 
 textToSylpar :: [SylPar] -> [Text] -> [[SylPar]]
 textToSylpar sylpars texts = map mapF scans
@@ -265,6 +273,7 @@ syllabizer2 :: Parser [Text]
 syllabizer2 = do
   matched <- choice [ many1 $ choice [ absolute
                                     -- , vccvcvcvvccvcv
+                                     , vccvcvccvcvvc
                                      , vccvccvcvcvvc
                                      , vccvcvccvvc
                                      , vcvcvcvcvvc
@@ -279,11 +288,14 @@ syllabizer2 = do
                                      , vcsvcvcvc
                                      , vsvcvcvvc
                                      , vcccvccvc
+                                     , vccvcccvv
                                      , vccvcvvc
                                      , vcccvccv
                                      , vcvccvvc
+                                     , vcsvcvvc -- asclepion
                                      , vcvccvcv
                                      , vccvcvcc
+                                     , vacvccdc
                                      , vcvccvc
                                      , vcvcvvc
                                      , vsvcvvc
@@ -300,12 +312,13 @@ syllabizer2 = do
                                      , vcsd
                                      , vcvc
                                      , cvcv
+                                 --    , vcc
                                      , multiMidConsonant
                                      , midConsonant
                                      , midConsonant2
+                                     , vcc
 
                                      , conVowelCon
-                                     , cvcv
                                      , vowelCon
                                      , conVowelDip
                                      , stopLiquidVowelCons
@@ -313,7 +326,6 @@ syllabizer2 = do
                                      , dualVowel
                                      , vowelDip
                                      , vOrD
-
                                      ]
                     ]
   endOfInput
@@ -329,6 +341,8 @@ syllabizer2 = do
     vccvccvcvcvvc :: Parser [Text]
     vccvccvcvcvvc = string "VCCVCCVCVCVVC" >> pure ["VC","CV","CCV","CV","CV","VC"] -- antescolarius
 
+    vccvcvccvcvvc = string "VCCVCVCCVCVVC" >> pure ["VC","CV","CVC","CVC","V","VC"] -- armamentarium
+
     vccvcvccvvc :: Parser [Text]
     vccvcvccvvc = string "VCCVCVCCVVC" >> pure ["VC","CV","CVC","CV","VC"] -- antependium
              
@@ -337,7 +351,7 @@ syllabizer2 = do
 
     vccvcvcvvc :: Parser [Text]
     vccvcvcvvc = string   "VCCVCVCVVC" >> pure ["VC","CV","CV","CV","VC"] -- anteloquium /an.teˈlo.kʷi.um/
-                 
+
     vccvcvccvc :: Parser [Text]
     vccvcvccvc = string   "VCCVCVCCVC" >> pure ["VC","CV","CVC","CVC"] -- architectus
 
@@ -362,6 +376,9 @@ syllabizer2 = do
     vcccvccvc :: Parser [Text]
     vcccvccvc = string     "VCCCVCCVC" >> pure ["VC","VCVC","CVC"] -- afflictor
 
+    vccvcccvv :: Parser [Text]
+    vccvcccvv = string "VCCVCCCVV" >> pure ["VC","CVCC","CV","V"] -- assumptio
+
     vccvcvcc :: Parser [Text]
     vccvcvcc = string       "VCCVCVCC" >> pure ["VC","CV","CVCC"] -- accidens
 
@@ -377,10 +394,14 @@ syllabizer2 = do
     vcvccvvc :: Parser [Text]
     vcvccvvc = string       "VCVCCVVC" >> pure ["V","CVC","CV","VC"] -- amussium /aˈmus.si.um/
 
+    vacvccdc :: Parser [Text]
+    vacvccdc = string       "VACVCCDC" >> pure ["V","A","CVC","CDC"] -- aquilunguis
 
+    vcsvcvvc :: Parser [Text]
+    vcsvcvvc = string       "VCSVCVVC" >> pure ["VC","SV","CV","VC"] -- asclepion
+    
     vcvcvvc :: Parser [Text]
     vcvcvvc = string         "VCVCVVC" >> pure ["V", "CV", "CV", "VC"] -- abigeus
-
 
     vsvcvvc :: Parser [Text]
     vsvcvvc = string         "VSVCVVC" >> pure ["V", "SV", "CV", "VC"] -- abluvium /abˈlu.wi.um/
@@ -431,6 +452,9 @@ syllabizer2 = do
     cvcv :: Parser [Text]
     cvcv = string "CVCV" >> pure ["CV", "CV"]
 
+    vcc :: Parser [Text]
+    vcc = string "VCC"  >> pure ["VCC"]-- ars
+           
     vowelCon :: Parser [Text]
     vowelCon = string "VC" >>= pure . (:[])
 
