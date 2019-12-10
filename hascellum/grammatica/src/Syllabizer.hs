@@ -265,6 +265,8 @@ syllabizer2 :: Parser [Text]
 syllabizer2 = do
   matched <- choice [ many1 $ choice [ absolute
                                     -- , vccvcvcvvccvcv
+                                     , vccvccvcvcvvc
+                                     , vccvcvccvvc
                                      , vcvcvcvcvvc
                                      , vcvvcvcvvc
                                      , vccvcvcvvc
@@ -289,6 +291,8 @@ syllabizer2 = do
                                      , vsvcvc
                                      , vcvcdc
                                      , vcdcvc
+                                     , vcccvc
+                                     , vvccv
                                      , cvcvc
                                      , vccvc
                                      , vcvcc
@@ -321,18 +325,24 @@ syllabizer2 = do
 
     -- vccvcvcvvccvcv :: Parser [Text]
     -- vccvcvcvvccvcv = string "VCCVCVCVVCCVCV" >> pure ["VC","CV","CV","CV","VC","CV","CV"] -- ambulatiuncula /am.bu.laː.tiˈun.ku.la/,
-               
+
+    vccvccvcvcvvc :: Parser [Text]
+    vccvccvcvcvvc = string "VCCVCCVCVCVVC" >> pure ["VC","CV","CCV","CV","CV","VC"] -- antescolarius
+
+    vccvcvccvvc :: Parser [Text]
+    vccvcvccvvc = string "VCCVCVCCVVC" >> pure ["VC","CV","CVC","CV","VC"] -- antependium
+             
     vcvcvcvcvvc :: Parser [Text]
-    vcvcvcvcvvc = string "VCVCVCVCVVC" >> pure ["V","CV","CV","CV","CV","VC"] -- "abecedarius"
+    vcvcvcvcvvc = string "VCVCVCVCVVC" >> pure ["V","CV","CV","CV","CV","VC"] -- abecedarius
 
     vccvcvcvvc :: Parser [Text]
     vccvcvcvvc = string   "VCCVCVCVVC" >> pure ["VC","CV","CV","CV","VC"] -- anteloquium /an.teˈlo.kʷi.um/
                  
     vccvcvccvc :: Parser [Text]
-    vccvcvccvc = string   "VCCVCVCCVC" >> pure ["VC","CV","CVC","CVC"] -- "architectus"
+    vccvcvccvc = string   "VCCVCVCCVC" >> pure ["VC","CV","CVC","CVC"] -- architectus
 
     vcvvcvcvvc :: Parser [Text]
-    vcvvcvcvvc = string   "VCVVCVCVVC" >> pure ["V","CV","VCV","CV","VC"] -- "abietārius"
+    vcvvcvcvvc = string   "VCVVCVCVVC" >> pure ["V","CV","VCV","CV","VC"] -- abietārius
 
     vccvsvcvvc :: Parser [Text]
     vccvsvcvvc = string   "VCCVSVCVVC" >> pure ["VC","CV","SV","CV","VC"] -- antebrachium /an.teˈbra.kʰi.um/,
@@ -341,7 +351,7 @@ syllabizer2 = do
     vcccvccvv = string     "VCCCVCCVV" >> pure ["VC","CCVC","CV","V"] -- abscessio
 
     vccvcvcvv :: Parser [Text]
-    vccvcvcvv = string     "VCCVCVCVV" >> pure ["VC", "CV", "CV", "CV", "V"]  -- "abdicatio"
+    vccvcvcvv = string     "VCCVCVCVV" >> pure ["VC", "CV", "CV", "CV", "V"]  -- abdicatio
 
     vsvcvcvvc :: Parser [Text]
     vsvcvcvvc = string     "VSVCVCVVC" >> pure ["V","SV","CV","CV","VC"] -- acrocorium
@@ -377,6 +387,9 @@ syllabizer2 = do
 
     vccdccv :: Parser [Text]
     vccdccv = string         "VCCDCCV" >> pure ["VC","CDC","CV"] -- anguilla /anˈɡʷiːl.la/
+
+    vcccvc :: Parser [Text]
+    vcccvc = string "VCCCVC" >> pure ["VC","CCVC"] -- anthrax
     
     vccdc :: Parser [Text]
     vccdc = string "VCCDC" >> pure ["VC","CDC"] -- anguis
@@ -390,6 +403,9 @@ syllabizer2 = do
 
     vccvc :: Parser [Text]
     vccvc = string "VCCVC" >> pure ["VC","CVC"] -- "abbas"
+
+    vvccv :: Parser [Text]
+    vvccv = string "VVCCV" >> pure ["V","VC","CV"] -- aorta
 
     vcvc :: Parser [Text]
     vcvc = string "VCVC" >> pure ["VC","VC"] -- "acor"
