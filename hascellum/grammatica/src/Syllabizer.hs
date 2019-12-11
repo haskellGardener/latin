@@ -270,18 +270,20 @@ tokenIzer = do
     consonants  = (choice $ map string consonantes) >>= pure . (:[]) . Consonant
     diphthongs  = (choice $ map string diphthongi ) >>= pure . (:[]) . Diphthong
     stopLiquidy = (choice $ map string stopLiquids) >>= pure . (:[]) . StopLiquid
+
+    -- much of the following are specializations, and can get tedious.
     -- ab is intolerable as it could be a-b... or ab-... The word after 'a' or 'ab' may be an actual word elsewhere.
     ab   = string "ab"   >> pure [Absolute "ab"]
     ap   = string "ap"   >> pure [Absolute "a", Consonant "p"]
     app  = string "app"  >> pure [Vowel "a", Consonant "p", Consonant "p"]
     apt  = string "apt"  >> pure [Vowel "a", Consonant "p", Consonant "t"]
-    appl  = string "appl"  >> pure [Vowel "a", Consonant "p", StopLiquid "pl"]
-    appr  = string "appr"  >> pure [Vowel "a", Consonant "p", StopLiquid "pr"]
+    appl = string "appl" >> pure [Vowel "a", Consonant "p", StopLiquid "pl"]
+    appr = string "appr" >> pure [Vowel "a", Consonant "p", StopLiquid "pr"]
     quu  = string "quu"  >> pure [Absolute "quu"]
     quo  = string "quo"  >> pure [Absolute "quo"]
     qui  = string "qui"  >> pure [Absolute "qui"]
     que  = string "que"  >> pure [Absolute "que"]
-    quen  = string "quen" >> pure [Absolute "quen"] -- UGLY. The system should better understand that the ue is a Vowel, but is inseparable from 'q'
+    quen = string "quen" >> pure [Absolute "quen"] -- UGLY. The system should better understand that the ue is a Vowel, but is inseparable from 'q'
     qua  = string "qua"  >> pure [Absolute "qua"]
     quae = string "quae" >> pure [Absolute "quae"]
     eum  = string "eum"  >> pure [Vowel "e", Absolute "um"]
