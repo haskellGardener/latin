@@ -200,6 +200,10 @@ sylText (Diphthong  x) = x
 sylText (Absolute   x) = x
 sylText (StopLiquid x) = x
 
+isAbsolute :: SylPar -> Bool
+isAbsolute (Absolute _) = True
+isAbsolute _ = False
+
 isConsonant :: SylPar -> Bool
 isConsonant (Consonant _) = True
 isConsonant _ = False
@@ -217,20 +221,23 @@ packEndConsonants toks
     rest = DL.take (length toks - length endCs) toks
     packed = Consonant . T.concat $ map (\(Consonant x) -> x) endCs
 
-packStartConsonants :: [] SylPar -> [] SylPar
+packStartConsonants :: [] SylPar -> [] SylPar -- consider packing trailing Consanants after starting Absolute
 packStartConsonants toks
-  | packed == Consonant T.empty = toks
-  | otherwise                   = packed:rest
+  | packed == Consonant T.empty = absolutes ++ toks
+  | otherwise                   = absolutes ++ packed:rest
   where
+-- process absolute and readd after packing.
     eitherSC x = isStopLiquid x || isConsonant x
-    begCs = DL.takeWhile eitherSC toks
-    rest = DL.dropWhile eitherSC toks
+    absolutes = DL.takeWhile isAbsolute toks
+    remToks = DL.dropWhile isAbsolute toks
+    begCs = DL.takeWhile eitherSC remToks
+    rest = DL.dropWhile eitherSC remToks
     packed = Consonant . T.concat $ map sylText begCs
 
 tokenIzer :: Parser [SylPar]
 tokenIzer = do
   tokens <- alx <|>
-            (do early <- consonantalVowels <|> ab <|> auto <|> auri <|> aux <|> au
+            (do early <- consonantalVowels <|> ab <|> auto <|> auri <|> aux <|> au <|> appl <|> appr <|> apt <|> app <|> ap 
                 tokens' <- tokes
                 pure $  (early:[]) ++ tokens'
             ) <|> tokes
@@ -265,6 +272,11 @@ tokenIzer = do
     stopLiquidy = (choice $ map string stopLiquids) >>= pure . (:[]) . StopLiquid
     -- ab is intolerable as it could be a-b... or ab-... The word after 'a' or 'ab' may be an actual word elsewhere.
     ab   = string "ab"   >> pure [Absolute "ab"]
+    ap   = string "ap"   >> pure [Absolute "a", Consonant "p"]
+    app  = string "app"  >> pure [Vowel "a", Consonant "p", Consonant "p"]
+    apt  = string "apt"  >> pure [Vowel "a", Consonant "p", Consonant "t"]
+    appl  = string "appl"  >> pure [Vowel "a", Consonant "p", StopLiquid "pl"]
+    appr  = string "appr"  >> pure [Vowel "a", Consonant "p", StopLiquid "pr"]
     quu  = string "quu"  >> pure [Absolute "quu"]
     quo  = string "quo"  >> pure [Absolute "quo"]
     qui  = string "qui"  >> pure [Absolute "qui"]
@@ -319,6 +331,11 @@ syllabizer2 = do
   pure $ join matched
   where
     general = choice [ absolute
+                     , cvcccvvc
+                     , cvcvcvcvc
+                     , cvcvcvcv
+                     , cvcvcvc
+                     , cvcvcv
                      , vccvcv
                      , endCvvc
                      , vccvcvcvvc
@@ -373,7 +390,7 @@ syllabizer2 = do
 
     absolute :: Parser [Text]
     absolute = string "A" >> pure ["A"]
-
+    cvcccvvc = string "CVCCCVVC" >> pure ["CVCC","CV","VC"] -- a-parctias
     endCvvc       = string          "CVVC" >> pure ["CV","VC"]
     cvccsv        = string        "CVCCSV" >> pure ["CVCC","SV"]                    -- borchgravius         
     vccvcv        = string        "VCCVCV" >> pure ["VC","CV", "CV"]
@@ -388,6 +405,10 @@ syllabizer2 = do
     vcccvccvc     = string     "VCCCVCCVC" >> pure ["VC","VCVC","CVC"]              -- afflictor
     vccvcvcc      = string      "VCCVCVCC" >> pure ["VC","CV","CVCC"]               -- accidens
     vcvcvvc       = string       "VCVCVVC" >> pure ["V","CV","CV","VC"]             -- abigeus
+    cvcvcvcvc     = string     "CVCVCVCVC" >> pure ["CV","CV","CV","CVC"] -- prettifier (this pattern could be captured with many1)
+    cvcvcvcv      = string      "CVCVCVCV" >> pure ["CV","CV","CV","CV"]  -- prettifier (this pattern could be captured with many1)
+    cvcvcvc       = string       "CVCVCVC" >> pure ["CV","CV","CVC"]      -- prettifier (this pattern could be captured with many1)
+    cvcvcv        = string        "CVCVCV" >> pure ["CV","CV","CV"]       -- prettifier (this pattern could be captured with many1)
     vcvcc         = string         "VCVCC" >> pure ["V","CVCC"]                     -- amans /ˈa.mans/
     cvcvc         = string         "CVCVC" >> pure ["CV","CVC"]                     -- pater
     vcvc          = string          "VCVC" >> pure ["VC","VC"]                      -- acor
