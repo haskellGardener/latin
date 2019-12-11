@@ -193,16 +193,39 @@ data SylPar = Vowel Text
             | StopLiquid Text
               deriving (Show, Eq)
 
+sylText :: SylPar -> Text
+sylText (Vowel      x) = x
+sylText (Consonant  x) = x
+sylText (Diphthong  x) = x
+sylText (Absolute   x) = x
+sylText (StopLiquid x) = x
+
 isConsonant :: SylPar -> Bool
 isConsonant (Consonant _) = True
 isConsonant _ = False
 
+isStopLiquid :: SylPar -> Bool
+isStopLiquid (StopLiquid _) = True
+isStopLiquid _ = False
+
 packEndConsonants :: [] SylPar -> [] SylPar
-packEndConsonants toks = let endCs = reverse . DL.takeWhile isConsonant $ reverse toks
-                             rest = DL.take (length toks - length endCs) toks
-                             packed = Consonant . T.concat $ map (\(Consonant x) -> x) endCs
-                         in if | packed == Consonant T.empty -> rest
-                               | otherwise -> rest ++ (packed:[])
+packEndConsonants toks
+  | packed == Consonant T.empty = toks
+  | otherwise                   = rest ++ (packed:[])
+  where
+    endCs = reverse . DL.takeWhile isConsonant $ reverse toks
+    rest = DL.take (length toks - length endCs) toks
+    packed = Consonant . T.concat $ map (\(Consonant x) -> x) endCs
+
+packStartConsonants :: [] SylPar -> [] SylPar
+packStartConsonants toks
+  | packed == Consonant T.empty = toks
+  | otherwise                   = packed:rest
+  where
+    eitherSC x = isStopLiquid x || isConsonant x
+    begCs = DL.takeWhile eitherSC toks
+    rest = DL.dropWhile eitherSC toks
+    packed = Consonant . T.concat $ map sylText begCs
 
 tokenIzer :: Parser [SylPar]
 tokenIzer = do
@@ -213,10 +236,10 @@ tokenIzer = do
             ) <|> tokes
 
   endOfInput
-  pure $ packEndConsonants $ join tokens
+  pure . packStartConsonants . packEndConsonants $ join tokens
   where
     tokes :: Parser [[SylPar]]
-    tokes = many1 $ choice [chi, eus, eum, quae, qua, que, qui, quo, quu, diphthongs, consonantalVowelsI, vowels, stopLiquidy, consonants]
+    tokes = many1 $ choice [chi, eus, eum, quae, qua, quen, que, qui, quo, quu, diphthongs, consonantalVowelsI, vowels, stopLiquidy, consonants]
 
     consonantalVowels :: Parser [SylPar]
     consonantalVowels = do
@@ -246,6 +269,7 @@ tokenIzer = do
     quo  = string "quo"  >> pure [Absolute "quo"]
     qui  = string "qui"  >> pure [Absolute "qui"]
     que  = string "que"  >> pure [Absolute "que"]
+    quen  = string "quen" >> pure [Absolute "quen"] -- UGLY. The system should better understand that the ue is a Vowel, but is inseparable from 'q'
     qua  = string "qua"  >> pure [Absolute "qua"]
     quae = string "quae" >> pure [Absolute "quae"]
     eum  = string "eum"  >> pure [Vowel "e", Absolute "um"]
@@ -267,13 +291,7 @@ textToSylpar sylpars texts = map mapF scans
     scanF (d,t) a = (d + t, a)
 
 sylparToSyllables :: [[SylPar]] -> [Text]
-sylparToSyllables sylpars = map (T.concat . map mapF) sylpars
-  where
-    mapF (Vowel      x) = x
-    mapF (Consonant  x) = x
-    mapF (Diphthong  x) = x -- Maybe recognize hiatus as well. Very tricky. e.g. 'deus' which is bisyllabe per diaersin
-    mapF (Absolute   x) = x -- used for prefixes and suffixes that should not be treated as part of the rest.
-    mapF (StopLiquid x) = x
+sylparToSyllables sylpars = map (T.concat . map sylText) sylpars
 
 syllablesToText :: [Text] -> Text
 syllablesToText ts = T.intercalate "-" ts
@@ -329,6 +347,7 @@ syllabizer2 = do
     general2 = choice [ absolute
                       , vac
                       , endCvvc
+                      , cvccsv
                       , vccvcvcvvc
                       , vccvcvccvc
                       , vccvcvcvv
@@ -356,6 +375,7 @@ syllabizer2 = do
     absolute = string "A" >> pure ["A"]
 
     endCvvc       = string          "CVVC" >> pure ["CV","VC"]
+    cvccsv        = string        "CVCCSV" >> pure ["CVCC","SV"]                    -- borchgravius         
     vccvcv        = string        "VCCVCV" >> pure ["VC","CV", "CV"]
     vccvcvcvvc    = string    "VCCVCVCVVC" >> pure ["VC","CV","CV","CV","VC"]       -- anteloquium /an.teˈlo.kʷi.um/
     vccvcvccvc    = string    "VCCVCVCCVC" >> pure ["VC","CV","CVC","CVC"]          -- architectus
