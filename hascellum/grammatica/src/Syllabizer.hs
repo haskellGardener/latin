@@ -157,7 +157,7 @@ vocales = ["ā", "ē", "ī", "ō", "ū", "a", "e", "i", "o", "u", "y", "ă", "ĕ
        ++ ["Ā", "Ē", "Ī", "Ō", "Ū", "A", "E", "I", "O", "U", "Y", "Ă", "Ĕ", "Ĭ", "Ŏ", "Ŭ", "Y̆"]
 
 diphthongi :: [] Text -- diphthongus diphthongī f
-diphthongi = ["ae", "au", "ei", "eu" {- sometimes: see deus -}, "oe", "ui"]
+diphthongi = ["ae", "au", "ei", "eu" {- rarely: see de-us -}, "oe", "ui"]
 
 liquids :: [] Text
 liquids = ["l", "r"]
@@ -223,21 +223,24 @@ packEndConsonants toks
 
 packStartConsonants :: [] SylPar -> [] SylPar -- consider packing trailing Consanants after starting Absolute
 packStartConsonants toks
-  | packed == Consonant T.empty = absolutes ++ toks
+  | packed == Consonant T.empty = toks
   | otherwise                   = absolutes ++ packed:rest
   where
 -- process absolute and readd after packing.
     eitherSC x = isStopLiquid x || isConsonant x
-    absolutes = DL.takeWhile isAbsolute toks
-    remToks = DL.dropWhile isAbsolute toks
-    begCs = DL.takeWhile eitherSC remToks
-    rest = DL.dropWhile eitherSC remToks
-    packed = Consonant . T.concat $ map sylText begCs
+    absolutes  = DL.takeWhile isAbsolute toks
+    remToks    = DL.dropWhile isAbsolute toks
+    begCs      = DL.takeWhile eitherSC remToks
+    rest       = DL.dropWhile eitherSC remToks
+    packed     = Consonant . T.concat $ map sylText begCs
 
 tokenIzer :: Parser [SylPar]
 tokenIzer = do
   tokens <- alx <|>
-            (do early <- consonantalVowels <|> ab <|> auto <|> auri <|> aux <|> au <|> appl <|> appr <|> apt <|> app <|> ap 
+            (do early <- choice [ consonantalVowels, ab
+                                , auto, auri, aux, au
+                                , appl, appr, apt, app, ap
+                                ]
                 tokens' <- tokes
                 pure $  (early:[]) ++ tokens'
             ) <|> tokes
@@ -333,11 +336,15 @@ syllabizer2 = do
   pure $ join matched
   where
     general = choice [ absolute
+                     , cvac -- coquus
+                     , cvccsvccvc
+                     , cvccvccsvc
+                     , cvccsvccvv
+                     , cvsvvcv
                      , cvcccvvc
-                     , cvcvcvcvc
-                     , cvcvcvcv
-                     , cvcvcvc
-                     , cvcvcv
+                     , mcvC
+                     , mcv
+                     , mvc
                      , vccvcv
                      , endCvvc
                      , vccvcvcvvc
@@ -350,11 +357,22 @@ syllabizer2 = do
                      , vcccvccvc
                      , vccvcccvv
                      , vccvcvcc -- Must have for accidens
+                     , cvccvccsvccvv
+                     , cvcccvsvcvv
+                     , cvccvccsvccvc
+                     , cvcaccvcvv
+                     , cvcaccvc
+                     , cvcccvv
+                     , cvcaccvv
+                     , cvcvcccvc
+                     , cvcvaccvc
+                     , cvcvaccv
+                     , cvaccvc
+                     , cvaccv   -- cachinnatio
+                     , cvcccvc
+                     , cvcccvcvc
                      , vcvcvvc
-                     , cvcvc
                      , vcvcc
-                     , vcvc
-                     , cvcv
                      , cvc
                      , vc
                      , cv
@@ -376,10 +394,24 @@ syllabizer2 = do
                       , vsvcvcvvc
                       , vcccvccvc
                       , vccvcccvv
+                      , cvcvaccvc
                       , vcvcvvc
+                      , cvcvaccv
+                      , cvcaccvv
+                      , cvcccvc
+                      , cvccsvccvc
+                      , cvccvccsvccvv
+                      , cvccvccsvccvc
+                      , cvcaccvcvv
+                      , cvcccvsvcvv
+                      , cvcccvv
+                      , cvcaccvc
+                      , cvcvcccvc
+                      , cvcccvcvc
+                      , cvaccvc
+                      , cvaccv
                       , cvcvc
                       , vcvcc
-                      , vcvc
                       , cvcv
                       , vcc -- This is a mess, and should only apply as a last resort.
                       , cvc
@@ -392,10 +424,34 @@ syllabizer2 = do
 
     absolute :: Parser [Text]
     absolute = string "A" >> pure ["A"]
-    cvcccvvc = string "CVCCCVVC" >> pure ["CVCC","CV","VC"] -- a-parctias
+    cvaccv        = string "CVACCV"        >> pure ["CV","AC","CV"]
+    cvaccvc       = string "CVACCVC"       >> pure ["CV","AC","CVC"]
+    cvcccvcvc     = string "CVCCCVCVC"     >> pure ["CVCC","CV","CVC"]             -- camptaules
+    cvcccvc       = string "CVCCCVC"       >> pure ["CVCC","CVC"]                  -- campter
+    cvcvcccvc     = string "CVCVCCCVC"     >> pure ["CV","CVC","CCVC"]             -- catarrhus
+
+    cvcvaccvc     = string "CVCVACCVC"     >> pure ["CV","CV","AC","CVC"]          -- catechismus
+    cvcvaccv      = string "CVCVACCV"      >> pure ["CV","CV","AC","CV"]           -- catechista
+    cvcccvv       = string "CVCCCVV"       >> pure ["CV","CC","CV","V"]            -- coemptio
+
+    cvcccvsvcvv   = string "CVCCCVSVCVV"   >> pure ["CVC","CCV","SV","CV","V"]     -- conflagratio
+    cvcaccvcvv    = string "CVCACCVCVV"    >> pure ["CVC","AC","CV","VC","V"]      -- conquassatio /kon.kʷasˈsaː.ti.oː/
+
+    cvcaccvv      = string "CVCACCVV"      >> pure ["CVC","AC","CV","V"]           -- conquestio
+    cvcaccvc      = string "CVCACCVC"      >> pure ["CVC","AC","CVC"]              -- conquestus
+    cvccsvccvv    = string "CVCCSVCCVV"    >> pure ["CVC","CSVC","CV","V"]         -- conscriptio
+    cvccsvccvc    = string "CVCCSVCCVC"    >> pure ["CVC","CSVC","CVC"]            -- conscriptor
+    cvccvccsvc    = string "CVCCVCCSVC"    >> pure ["CVC","CVCC","SVC"]            -- contemptrix
+    cvac          = string "CVAC"          >> pure ["CV","AC"]                     -- coquus
+    
+    cvccvccsvccvv = string "CVCCVCCSVCCVV" >> pure ["CVC","CVC","CSVC", "CV", "V"] -- circumscriptio
+    cvccvccsvccvc = string "CVCCVCCSVCCVC" >> pure ["CVC","CVC","CSVC", "CVC"]     -- circumscriptor
+
+    cvcccvvc      = string      "CVCCCVVC" >> pure ["CVCC","CV","VC"]               -- a-parctias
     endCvvc       = string          "CVVC" >> pure ["CV","VC"]
-    cvccsv        = string        "CVCCSV" >> pure ["CVCC","SV"]                    -- borchgravius         
+    cvccsv        = string        "CVCCSV" >> pure ["CVCC","SV"]                    -- borchgravius
     vccvcv        = string        "VCCVCV" >> pure ["VC","CV", "CV"]
+    cvsvvcv       = string       "CVSVVCV" >> pure ["CV","SV","V","CV"]             -- special for bibliothe...
     vccvcvcvvc    = string    "VCCVCVCVVC" >> pure ["VC","CV","CV","CV","VC"]       -- anteloquium /an.teˈlo.kʷi.um/
     vccvcvccvc    = string    "VCCVCVCCVC" >> pure ["VC","CV","CVC","CVC"]          -- architectus
     vsvcvcvvc     = string     "VSVCVCVVC" >> pure ["V","SV","CV","CV","VC"]        -- acrocorium
@@ -407,13 +463,8 @@ syllabizer2 = do
     vcccvccvc     = string     "VCCCVCCVC" >> pure ["VC","VCVC","CVC"]              -- afflictor
     vccvcvcc      = string      "VCCVCVCC" >> pure ["VC","CV","CVCC"]               -- accidens
     vcvcvvc       = string       "VCVCVVC" >> pure ["V","CV","CV","VC"]             -- abigeus
-    cvcvcvcvc     = string     "CVCVCVCVC" >> pure ["CV","CV","CV","CVC"] -- prettifier (this pattern could be captured with many1)
-    cvcvcvcv      = string      "CVCVCVCV" >> pure ["CV","CV","CV","CV"]  -- prettifier (this pattern could be captured with many1)
-    cvcvcvc       = string       "CVCVCVC" >> pure ["CV","CV","CVC"]      -- prettifier (this pattern could be captured with many1)
-    cvcvcv        = string        "CVCVCV" >> pure ["CV","CV","CV"]       -- prettifier (this pattern could be captured with many1)
     vcvcc         = string         "VCVCC" >> pure ["V","CVCC"]                     -- amans /ˈa.mans/
     cvcvc         = string         "CVCVC" >> pure ["CV","CVC"]                     -- pater
-    vcvc          = string          "VCVC" >> pure ["VC","VC"]                      -- acor
     cvcv          = string          "CVCV" >> pure ["CV","CV"]
     vcc           = string           "VCC" >> pure ["VCC"]                          -- ars
     vac           = string           "VAC" >> pure ["V","AC"]
@@ -421,6 +472,15 @@ syllabizer2 = do
     cv            = string            "CV" >> pure ["CV"]
     vc            = string            "VC" >> pure ["VC"]
     singleVowel   = string             "V" >> pure ["V"]
+
+    mcvC = do -- prettifier
+      mcv' <- mcv
+      _ <- string "C"
+      pure $ init mcv' ++ ["CVC"]
+
+    mcv = many1 $ string "CV" -- prettifier
+
+    mvc = many1 $ string "VC" -- prettifier
 
     stopLiquidVowelCons :: Parser [Text]
     stopLiquidVowelCons = string "SVC" >>= pure . (:[])
