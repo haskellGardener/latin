@@ -346,6 +346,7 @@ syllabizer2 = do
                      , cvsvvcv
                      , cvcccvvc
                      , cvcvccsvc
+                     , vcvcac
                      , mcvC
                      , mcv
                      , mvc
@@ -457,7 +458,7 @@ syllabizer2 = do
     cvcvcccvv     = string "CVCVCCCVV"     >> pure ["CV","CVCC","CV","V"]          -- defunctio
     cvvcccvv      = string "CVVCCCVV"      >> pure ["CV","CV","CCV","V"]           -- diarrhoea
 
-
+    vcvcac        = string "VCVCAC"        >> pure ["V","CVC","AC"] -- enorchis
                     
     cvcccvvc      = string      "CVCCCVVC" >> pure ["CVCC","CV","VC"]               -- a-parctias
     endCvvc       = string          "CVVC" >> pure ["CV","VC"]
