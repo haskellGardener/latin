@@ -102,4 +102,7 @@ workinglist = DL.concat [ ablist
                         , inlist
                         , iolist
                         , irlist
+                        , islist
+                        , itlist
+                        , iulist
                         ]
