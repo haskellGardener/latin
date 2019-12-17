@@ -148,3 +148,306 @@ helist = [ "hebdomada"
          , "hexameter"
          , "hexas"
          ]
+
+hilist :: [] Text
+hilist = [ "hiatus"
+         , "Hiber"
+         , "hibernaculum"
+         , "hibernicus"
+         , "hibernum"
+         , "Hiberus"
+         , "hibiscum"
+         , "hibix"
+         , "hibrida"
+         , "hiemps"
+         , "hiems"
+         , "hieracitis"
+         , "hierarcha"
+         , "hierarchia"
+         , "hierophylāx"
+         , "hilaritas"
+         , "hilaritudo"
+         , "hillae"
+         , "hilum"
+         , "hilus"
+         , "himantopus"
+         , "hinnus"
+         , "hinsidia"
+         , "hinulus"
+         , "hippeus"
+         , "hippocampus"
+         , "hippocentaurus"
+         , "hippodromos"
+         , "hippopera"
+         , "hippophobas"
+         , "hippopotamus"
+         , "hippotoxotae"
+         , "hippurus"
+         , "hir"
+         , "hira"
+         , "hircus"
+         , "hirnea"
+         , "hirpex"
+         , "hirpus"
+         , "hirritus"
+         , "hirudo"
+         , "hirundo"
+         , "hispanus"
+         , "histon"
+         , "historia"
+         , "historicitas"
+         , "histrio"
+         , "histrix"
+         , "hittus"
+         ]
+
+holist :: [] Text
+holist = [ "hoedus"
+         , "hoitzitzillin"
+         , "holcus"
+         , "holmium"
+         , "holocaustoma"
+         , "holocaustosis"
+         , "holocaustum"
+         , "holocautoma"
+         , "holus"
+         , "homeltium"
+         , "homicida"
+         , "homicidium"
+         , "homilia"
+         , "homo"
+         , "homoeoteleuton"
+         , "homogenia"
+         , "homophylophilia"
+         , "homosexualitas"
+         , "homullus"
+         , "homuncio"
+         , "homunculus"
+         , "honestas"
+         , "honestum"
+         , "honor"
+         , "honorificabilitudinitas"
+         , "honorificentia"
+         , "honos"
+         , "hoplomachos"
+         , "hoplomachus"
+         , "hora"
+         , "horae"
+         , "horarium"
+         , "hordeolus"
+         , "hordeum"
+         , "horia"
+         , "horizon"
+         , "hormenos"
+         , "horminum"
+         , "hormiscion"
+         , "horologium"
+         , "horreum"
+         , "horripilatio"
+         , "horror"
+         , "hortatio"
+         , "hortator"
+         , "hortatus"
+         , "hortulanus"
+         , "hortulus"
+         , "hortus"
+         , "hosae"
+         , "hospes"
+         , "hospicium"
+         , "hospitaculum"
+         , "hospitale"
+         , "hospitalia"
+         , "hospitalitas"
+         , "hospitator"
+         , "hospiticida"
+         , "hospitiolum"
+         , "hospitium"
+         , "hostia"
+         , "hostilitas"
+         , "hostis"
+         , "hostorium"
+         , "hostus"
+         ]
+
+hulist :: [] Text
+hulist = [ "huiuscemodi"
+         , "humanitas"
+         , "humanus"
+         , "humerale"
+         , "humerus"
+         , "humiditas"
+         , "humiliatio"
+         , "humilitas"
+         , "humor"
+         , "humus"
+         , "huso"
+         , "hutesium"
+         ]
+
+hylist :: [] Text
+hylist = [ "hyacinthus"
+         , "hyaena"
+         , "hyalus"
+         , "hybrida"
+         , "hydra"
+         , "hydrargyrum"
+         , "hydrargyrus"
+         , "hydraulus"
+         , "hydria"
+         , "hydrodendro"
+         , "hydrogenium"
+         , "hydrogenum"
+         , "hydromantia"
+         , "hydromantis"
+         , "hydromel"
+         , "hydromeli"
+         , "hydrophobia"
+         , "hydrophobus"
+         , "hydropismus"
+         , "hydrus"
+         , "hyems"
+         , "hygra"
+         , "hyle"
+         , "hymenaeus"
+         , "hymnus"
+         , "hyoscyamus"
+         , "hyoseris"
+         , "hyperbole"
+         , "hypericon"
+         , "hypocauston"
+         , "hypocaustum"
+         , "hypocrisis"
+         , "hypocrita"
+         , "hypogaeum"
+         , "hypotaurium"
+         , "hypotheca"
+         , "hypothesis"
+         , "hysginum"
+         , "hysopum"
+         , "hystrix"
+         ]
+
+ialist :: [] Text
+ialist = [ "i"
+         , "iacea"
+         , "iactantia"
+         , "iactatio"
+         , "iactatrix"
+         , "iactura"
+         , "iactus"
+         , "iaculamentum"
+         , "iaculatio"
+         , "iaculator"
+         , "iaculatrix"
+         , "iaculum"
+         , "iaculus"
+         , "iambicus"
+         , "iambus"
+         , "ianiculum"
+         , "ianiculus"
+         , "ianitor"
+         , "ianthis"
+         , "ianua"
+         , "ianuarius"
+         , "Ianuarius"
+         , "ianus"
+         , "Iapys"
+         , "iasione"
+         , "iaspachates"
+         , "iaspis"
+         , "iasponyx"
+         , "iatralipta"
+         , "iatraliptice"
+         , "iatronices"
+         ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

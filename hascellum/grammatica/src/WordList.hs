@@ -87,4 +87,9 @@ workinglist = DL.concat [ ablist
                         , gylist
                         , halist
                         , helist
+                        , hilist
+                        , holist
+                        , hulist
+                        , hylist
+                        , ialist
                         ]
