@@ -337,6 +337,8 @@ syllabizer2 = do
   where
     general = choice [ absolute
                      , cvac -- coquus
+                     , cvcccv
+                     , cvccsvc
                      , cvvcccvv
                      , cvccccvc
                      , cvcvcccvv
@@ -458,7 +460,9 @@ syllabizer2 = do
     cvcvcccvv     = string "CVCVCCCVV"     >> pure ["CV","CVCC","CV","V"]          -- defunctio
     cvvcccvv      = string "CVVCCCVV"      >> pure ["CV","CV","CCV","V"]           -- diarrhoea
 
-    vcvcac        = string "VCVCAC"        >> pure ["V","CVC","AC"] -- enorchis
+    vcvcac        = string "VCVCAC"        >> pure ["V","CVC","AC"]                -- enorchis
+    cvccsvc       = string "CVCCSVC"       >> pure ["CVC","CSVC"]                  -- monstrum
+    cvcccv        = string "CVCCCV"        >> pure ["CVCC","CV"]                   -- mulcta
                     
     cvcccvvc      = string      "CVCCCVVC" >> pure ["CVCC","CV","VC"]               -- a-parctias
     endCvvc       = string          "CVVC" >> pure ["CV","VC"]
