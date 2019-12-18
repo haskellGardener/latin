@@ -120,4 +120,10 @@ workinglist = DL.concat [ ablist
                         , molist
                         , mulist
                         , mylist
+                        , nalist
+                        , nelist
+                        , nilist
+                        , nolist
+                        , nulist
+                        , nylist
                         ]
