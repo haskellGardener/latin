@@ -126,4 +126,16 @@ workinglist = DL.concat [ ablist
                         , nolist
                         , nulist
                         , nylist
+                        , oblist
+                        , oclist
+                        , odlist
+                        , oelist
+                        , oflist
+                        , ollist
+                        , omlist
+                        , onlist
+                        , oplist
+                        , orlist
+                        , oslist
+                        , otlist
                         ]

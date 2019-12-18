@@ -349,6 +349,7 @@ syllabizer2 = do
                      , cvcccvvc
                      , cvcvccsvc
                      , vcvcac
+                     , vcac
                      , mcvC
                      , mcv
                      , mvc
@@ -463,6 +464,8 @@ syllabizer2 = do
     vcvcac        = string "VCVCAC"        >> pure ["V","CVC","AC"]                -- enorchis
     cvccsvc       = string "CVCCSVC"       >> pure ["CVC","CSVC"]                  -- monstrum
     cvcccv        = string "CVCCCV"        >> pure ["CVCC","CV"]                   -- mulcta
+
+    vcac          = string "VCAC"          >> pure ["VC","AC"]                     -- orchis
                     
     cvcccvvc      = string      "CVCCCVVC" >> pure ["CVCC","CV","VC"]               -- a-parctias
     endCvvc       = string          "CVVC" >> pure ["CV","VC"]
