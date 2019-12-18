@@ -32,8 +32,10 @@ library
                    , Nomen
                    , Syllabizer
                    , WordList
-                   , WordsAtoG
+                   , WordsAtoC
+                   , WordsDtoG
                    , WordsHtoM
+                   , WordsNtoS
   build-depends:     base >= 4.8 && < 5
                    , text
                    , attoparsec

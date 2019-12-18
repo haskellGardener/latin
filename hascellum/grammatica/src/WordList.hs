@@ -4,8 +4,10 @@ import Data.Text (Text)
 import qualified Data.List as DL
 
 import Syllabizer
-import WordsAtoG
+import WordsAtoC
+import WordsDtoG
 import WordsHtoM
+import WordsNtoS
 
 irun :: Text -> Text
 irun x = tokenToText $ outerToken x
