@@ -138,4 +138,14 @@ workinglist = DL.concat [ ablist
                         , orlist
                         , oslist
                         , otlist
+                        , palist
+                        , pelist
+                        , phlist
+                        , pilist
+                        , pllist
+                        , polist
+                        , prlist
+                        , pslist
+                        , pulist
+                        , pylist
                         ]
