@@ -148,4 +148,5 @@ workinglist = DL.concat [ ablist
                         , pslist
                         , pulist
                         , pylist
+                        , qulist
                         ]

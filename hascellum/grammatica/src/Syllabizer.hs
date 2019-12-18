@@ -249,7 +249,7 @@ tokenIzer = do
   pure . packStartConsonants . packEndConsonants $ join tokens
   where
     tokes :: Parser [[SylPar]]
-    tokes = many1 $ choice [chi, eus, eum, quae, qua, quen, que, qui, quo, quu, diphthongs, consonantalVowelsI, vowels, stopLiquidy, consonants]
+    tokes = many1 $ choice [chi, eus, eum, quae, qua, quen, que, quin, qui, quo, quu, diphthongs, consonantalVowelsI, vowels, stopLiquidy, consonants]
 
     consonantalVowels :: Parser [SylPar]
     consonantalVowels = do
@@ -285,6 +285,7 @@ tokenIzer = do
     quu  = string "quu"  >> pure [Absolute "quu"]
     quo  = string "quo"  >> pure [Absolute "quo"]
     qui  = string "qui"  >> pure [Absolute "qui"]
+    quin = string "quin" >> pure [Absolute "quin"]
     que  = string "que"  >> pure [Absolute "que"]
     quen = string "quen" >> pure [Absolute "quen"] -- UGLY. The system should better understand that the ue is a Vowel, but is inseparable from 'q'
     qua  = string "qua"  >> pure [Absolute "qua"]
@@ -335,7 +336,14 @@ syllabizer2 = do
 
   pure $ join matched
   where
-    general = choice [ absolute
+    general = choice [ acvcvc
+                     , acacvvc
+                     , acacvcv
+                     , acacvc
+                     , acacvv
+                     , acvc
+                     , absolute
+                     , cvcccvvc
                      , cvac -- coquus
                      , cvcccv
                      , cvccsvc
@@ -346,7 +354,6 @@ syllabizer2 = do
                      , cvccvccsvc
                      , cvccsvccvv
                      , cvsvvcv
-                     , cvcccvvc
                      , cvcvccsvc
                      , vcvcac
                      , vcac
@@ -393,6 +400,7 @@ syllabizer2 = do
                       , vac
                       , endCvvc
                       , cvccsv
+                      , cvcccvvc
                       , vccvcvcvvc
                       , vccvcvccvc
                       , vccvcvcvv
@@ -466,7 +474,15 @@ syllabizer2 = do
     cvcccv        = string "CVCCCV"        >> pure ["CVCC","CV"]                   -- mulcta
 
     vcac          = string "VCAC"          >> pure ["VC","AC"]                     -- orchis
-                    
+
+    acacvc        = string "ACACVC"        >> pure ["AC","A","CVC"]                -- querquetum
+    acacvcv       = string "ACACVCV"       >> pure ["AC","A","CV","CV"]            -- querquedula
+    acvc          = string "ACVC"          >> pure ["A","CVC"]                     -- quincunx
+    acacvvc       = string "ACACVVC"       >> pure ["AC","A","CV","VC"]            -- quinquennium
+    acacvv        = string "ACACVV"        >> pure ["AC","A","CV","V"]             -- quisquilia
+
+    acvcvc        = string "ACVCVC"        >> pure ["A","CVC","VC"]                -- quindecim
+
     cvcccvvc      = string      "CVCCCVVC" >> pure ["CVCC","CV","VC"]               -- a-parctias
     endCvvc       = string          "CVVC" >> pure ["CV","VC"]
     cvccsv        = string        "CVCCSV" >> pure ["CVCC","SV"]                    -- borchgravius
