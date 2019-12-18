@@ -343,6 +343,7 @@ syllabizer2 = do
                      , acacvv
                      , acvc
                      , absolute
+                     , ca
                      , cvcccvvc
                      , cvac -- coquus
                      , cvcccv
@@ -482,6 +483,8 @@ syllabizer2 = do
     acacvv        = string "ACACVV"        >> pure ["AC","A","CV","V"]             -- quisquilia
 
     acvcvc        = string "ACVCVC"        >> pure ["A","CVC","VC"]                -- quindecim
+
+    ca         = string "CA"         >> pure ["CA"]                 -- schidia
 
     cvcccvvc      = string      "CVCCCVVC" >> pure ["CVCC","CV","VC"]               -- a-parctias
     endCvvc       = string          "CVVC" >> pure ["CV","VC"]

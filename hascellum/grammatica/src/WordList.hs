@@ -149,4 +149,5 @@ workinglist = DL.concat [ ablist
                         , pulist
                         , pylist
                         , qulist
+                        , r_list -- Lazy
                         ]
