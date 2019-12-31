@@ -1,4 +1,4 @@
-{-# LANGUAGE RecordWildCards, MultiWayIf  #-}
+{-# LANGUAGE RecordWildCards, MultiWayIf, TemplateHaskell, QuasiQuotes  #-}
 {-|
 
 Module      : Nomen
@@ -49,19 +49,48 @@ module Nomen
 
 where
 
+-- Explicit Imports
+
+import Data.Maybe (fromMaybe)
 import Data.Text (Text)
-import qualified Data.Text as T
-import qualified Data.List as DL
--- import Data.Ord
+
+-- Qualified Imports
+
+import qualified Data.List          as DL
+import qualified Data.Text          as T
+import qualified Data.Text.Lazy.IO  as TIO
+import qualified Text.Blaze.Internal as TBI
+
+-- Undisciplined Imports
+
+import Text.Hamlet
+import Text.Blaze.Html.Renderer.Text
+
+-- End of Imports
+-- --------------------------------------------------------------------------------------------------------------------------------------------------------
 
 data Casus
   = Nominativus | Vocativus | Accusativus | Genetivus | Dativus | Ablativus -- -- | Locativus
     deriving (Ord, Show, Eq, Enum)
 
+-- instance Show Casus where
+--   show Nominativus = "Nom"
+--   show Vocativus   = "Voc"
+--   show Accusativus = "Acc"
+--   show Genetivus   = "Gen"
+--   show Dativus     = "Dat"
+--   show Ablativus   = "Abl"
+
 data Genera
-  = Masculinum | Femininum | Neutrum
+  = Masculinum | Femininum | Neutrum | MasculinumFemininum
     deriving (Ord, Show, Eq, Enum)
 
+shortGenera :: Genera -> Text
+shortGenera Masculinum = "m"
+shortGenera Femininum  = "f"
+shortGenera Neutrum    = "n"
+shortGenera MasculinumFemininum = "m/f"
+             
 data Numeri
   = Singularis | Pluralis
     deriving (Ord, Show, Eq, Enum)
@@ -114,7 +143,7 @@ Third declension I-stem rules:
 
 
   3rd Declension: Pure I-stems, m. / f.
-  
+
   66. Masculine and feminine parisyllabic nouns in -is form the nominative singular by adding s to
       the stem. Four stems in bri- and tri- do not add s to form the nominative, but drop i and insert e
       before r . These are imber, linter, ūter, venter.
@@ -122,28 +151,83 @@ Third declension I-stem rules:
   Pure I-stem, N
   3rd Declension: Pure I-stems, m. / f.
   3rd Declension: Mixed I-stem
-  
+
   68. In neuters the nominative is the same as the stem, with final i changed to e (mare, stem
       mari-). But most nouns1 in which the i of the stem is preceded by -āl- or -ār- lose the final
       vowel and shorten the preceding ā.
-  
+
   animăl, stem animāli-2
-  
+
   a. Neuters in -e, -al, and -ar have -ī in the ablative singular, -ium in the genitive plural, and
      -ia in the nominative and accusative plural.
-  
+
   animal, animālī, -ia, -ium
 
 -}
 
 
+scribeNomenParadigma :: Nomen -> TBI.Markup
+scribeNomenParadigma nomen@(Nomen {..}) =
+  [shamlet|
+     <table class="nomen">
+       <tr>
+          <th colspan="3" class="topper">#{dictionariumArticulum}, #{genetivusRadix}
+            <em>#{articulumSuffixum}
+            <b>#{shortGenera nomenGenus}
+       <tr>
+          <th>Cāsūs
+          <th>Singulāris
+          <th>Plūrālis
+       <tr>
+          <td>Nom
+          <td>#{dictionariumArticulum}
+          <td>#{radix $ findCGNNP Nominativus nomenGenus Pluralis nomen}
+             <em>#{suffixum $ findCGNNP Nominativus nomenGenus Pluralis nomen}
+       <tr>
+          <td>Acc
+          <td>#{radix $ findCGNNP Accusativus nomenGenus Singularis nomen}
+             <em>#{suffixum $ findCGNNP Accusativus nomenGenus Singularis nomen}
+          <td>#{radix $ findCGNNP Accusativus nomenGenus Pluralis nomen}
+             <em>#{suffixum $ findCGNNP Accusativus nomenGenus Pluralis nomen}
+       <tr>
+          <td>Gen
+          <td>#{radix $ findCGNNP Genetivus nomenGenus Singularis nomen}
+             <em>#{suffixum $ findCGNNP Genetivus nomenGenus Singularis nomen}
+          <td>#{radix $ findCGNNP Genetivus nomenGenus Pluralis nomen}
+             <em>#{suffixum $ findCGNNP Genetivus nomenGenus Pluralis nomen}
+       <tr>
+          <td>Dat
+          <td>#{radix $ findCGNNP Dativus nomenGenus Singularis nomen}
+             <em>#{suffixum $ findCGNNP Dativus nomenGenus Singularis nomen}
+          <td>#{radix $ findCGNNP Dativus nomenGenus Pluralis nomen}
+             <em>#{suffixum $ findCGNNP Dativus nomenGenus Pluralis nomen}
+       <tr>
+          <td>Abl
+          <td>#{radix $ findCGNNP Ablativus nomenGenus Singularis nomen}
+             <em>#{suffixum $ findCGNNP Ablativus nomenGenus Singularis nomen}
+          <td>#{radix $ findCGNNP Ablativus nomenGenus Pluralis nomen}
+             <em>#{suffixum $ findCGNNP Ablativus nomenGenus Pluralis nomen}
+       $if isVoc
+         <tr>
+            <td>Voc
+            <td>#{radix voc}
+               <em>#{suffixum voc}
+            <td>#{radix vocP}
+               <em>#{suffixum vocP}
+  |]
+  where
+    isVoc = T.append (radix voc) (suffixum voc) /= dictionariumArticulum
+    voc  = findCGNNP Vocativus nomenGenus Singularis nomen
+    vocP = findCGNNP Vocativus nomenGenus Pluralis   nomen
 
+findCGNNP :: Casus -> Genera -> Numeri -> Nomen -> Paradigma
+findCGNNP c g n Nomen {..} = fromMaybe def $ DL.find findF paradigma
+  where
+    def = Paradigma Nominativus Femininum Singularis "" "" ""
+    findF :: Paradigma -> Bool
+    findF Paradigma {..} | genera == MasculinumFemininum = casus == c && Masculinum == g && numerus == n
+                         | otherwise = casus == c && genera == g && numerus == n
 
-
-
-
-
-                
 labefaceApex :: Text -> Text
 labefaceApex input = T.map mapF input
   where
@@ -170,6 +254,9 @@ scribeResPerfectumSingularis Nomen {..} = map resPerfectum $ DL.sort $ filter ((
 scribeResPerfectumPluralis :: Nomen -> [] Text
 scribeResPerfectumPluralis Nomen {..} = map resPerfectum $ DL.sort $ filter ((== Pluralis) . numerus) paradigma
 
+faceParadigmaAlt :: (NDeclinationes, Text, Text, Text, Genera, NominisSpecies) -> Maybe Nomen
+faceParadigmaAlt (nd, da, as, gr, ns, g) = faceParadigma nd da as gr g ns
+                                        
 faceParadigma :: NDeclinationes -> Text -> Text -> Text -> NominisSpecies -> Genera -> Maybe Nomen
 faceParadigma _ "" _ _ _ _ = Nothing
 faceParadigma _ _ _ "" _ _ = Nothing
@@ -185,7 +272,9 @@ faceParadigma ndecl dictionariumArticulum articulumSuffixum genetivusRadix nomen
          | DL.null paradigma' -> Nothing
          | DL.any (\Paradigma {..}
                      -> casus   == Nominativus
-                     && genera  == genera_pp
+                     && genera  == (if | genera_pp == MasculinumFemininum -> Masculinum
+                                       | otherwise -> genera_pp
+                                   )
                      && numerus == Singularis
                   ) paradigma'
            -> Just $ finalize paradigma'
@@ -200,26 +289,38 @@ faceParadigma ndecl dictionariumArticulum articulumSuffixum genetivusRadix nomen
 
     percolaF :: Paradigma -> Bool -- percōlō, percōlāre, percōlāve, percōlātum   (imperativus >> percōlā)
     percolaF = (genera_pp ==) . genera
-      
+
     mapF :: Paradigma -> Paradigma
     mapF Paradigma {..} = subMapF ndecl casus genera numerus
       where
         subMapF :: NDeclinationes -> Casus -> Genera -> Numeri -> Paradigma
-        subMapF NomenTertia Nominativus _ Singularis 
+        subMapF NomenTertia Nominativus _ Singularis
           = Paradigma { radix = ""
                       , resPerfectum = dictionariumArticulum
                       , ..
                       }
-        subMapF NomenTertia Accusativus Neutrum Singularis 
+        subMapF NomenTertia Accusativus Neutrum Singularis
           = Paradigma { radix = ""
                       , resPerfectum = dictionariumArticulum
                       , ..
                       }
-        subMapF NomenSecunda Vocativus _ Singularis 
+        subMapF NomenSecunda Vocativus Masculinum Singularis
+          = if | "us" `T.isSuffixOf` labefaceApex dictionariumArticulum
+                 -> Paradigma { radix = genetivusRadix
+                              , resPerfectum =  T.append genetivusRadix "e"
+                              , suffixum = "e"
+                              , ..
+                              }
+               | otherwise
+                 -> Paradigma { radix = genetivusRadix
+                              , resPerfectum = dictionariumArticulum
+                              , ..
+                              }
+        subMapF NomenSecunda Vocativus _ Singularis
           = if |    "ius" `T.isSuffixOf` labefaceApex dictionariumArticulum
                  || "ium" `T.isSuffixOf` labefaceApex dictionariumArticulum
-                 -> Paradigma { radix = genetivusRadix 
-                              , resPerfectum =  T.append genetivusRadix "e"
+                 -> Paradigma { radix = genetivusRadix
+                              , resPerfectum =  T.append genetivusRadix "ī"
                               , ..
                               }
                | otherwise
@@ -229,20 +330,20 @@ faceParadigma ndecl dictionariumArticulum articulumSuffixum genetivusRadix nomen
                               }
         subMapF NomenQuinta Genetivus _ Singularis
           = if | "ies" `T.isSuffixOf` labefaceApex dictionariumArticulum
-                 -> Paradigma { radix = genetivusRadix 
+                 -> Paradigma { radix = genetivusRadix
                               , resPerfectum = T.append genetivusRadix "ēī"
                               , suffixum = "ēī"
                               , ..
                               }
                | otherwise
-                 -> Paradigma { radix = genetivusRadix 
+                 -> Paradigma { radix = genetivusRadix
                               , resPerfectum = T.append genetivusRadix "eī"
                               , suffixum = "eī"
                               , ..
                               }
         subMapF NomenQuinta Dativus _ Singularis
           = if | "ies" `T.isSuffixOf` labefaceApex dictionariumArticulum
-                 -> Paradigma { radix = genetivusRadix 
+                 -> Paradigma { radix = genetivusRadix
                               , resPerfectum = T.append genetivusRadix "ēī"
                               , suffixum = "ēī"
                               , ..
@@ -1272,103 +1373,103 @@ declinationes =
 {- For testing
 
 NomenSecunda Masculinum
-[ 
-    ( "filius" 
-    , "filiī" 
-    ) 
-, 
-    ( "filie" 
-    , "filiī" 
-    ) 
-, 
-    ( "filium" 
-    , "filiōs" 
-    ) 
-, 
-    ( "filiī" 
-    , "filiōrum" 
-    ) 
-, 
-    ( "filiō" 
-    , "filiīs" 
-    ) 
-, 
-    ( "filiō" 
-    , "filiīs" 
-    ) 
+[
+    ( "filius"
+    , "filiī"
+    )
+,
+    ( "filie"
+    , "filiī"
+    )
+,
+    ( "filium"
+    , "filiōs"
+    )
+,
+    ( "filiī"
+    , "filiōrum"
+    )
+,
+    ( "filiō"
+    , "filiīs"
+    )
+,
+    ( "filiō"
+    , "filiīs"
+    )
 ]
 
 NomenSecunda Masculinum
-[ 
-    ( "ager" 
-    , "agrī" 
-    ) 
-, 
-    ( "ager" 
-    , "agrī" 
-    ) 
-, 
-    ( "agrum" 
-    , "agrōs" 
-    ) 
-, 
-    ( "agrī" 
-    , "agrōrum" 
-    ) 
-, 
-    ( "agrō" 
-    , "agrīs" 
-    ) 
-, 
-    ( "agrō" 
-    , "agrīs" 
-    ) 
+[
+    ( "ager"
+    , "agrī"
+    )
+,
+    ( "ager"
+    , "agrī"
+    )
+,
+    ( "agrum"
+    , "agrōs"
+    )
+,
+    ( "agrī"
+    , "agrōrum"
+    )
+,
+    ( "agrō"
+    , "agrīs"
+    )
+,
+    ( "agrō"
+    , "agrīs"
+    )
 ]
 
 NomenSecunda Neutrum
-[ 
-    ( "bellum" 
-    , "bella" 
-    ) 
-, 
-    ( "bellum" 
-    , "bella" 
-    ) 
-, 
-    ( "bellum" 
-    , "bella" 
-    ) 
-, 
-    ( "bellī" 
-    , "bellōrum" 
-    ) 
-, 
-    ( "bellō" 
-    , "bellīs" 
-    ) 
-, 
-    ( "bellō" 
-    , "bellīs" 
-    ) 
-] 
+[
+    ( "bellum"
+    , "bella"
+    )
+,
+    ( "bellum"
+    , "bella"
+    )
+,
+    ( "bellum"
+    , "bella"
+    )
+,
+    ( "bellī"
+    , "bellōrum"
+    )
+,
+    ( "bellō"
+    , "bellīs"
+    )
+,
+    ( "bellō"
+    , "bellīs"
+    )
+]
 
 maybe [] scribeResPerfectumSingularis $ faceParadigma NomenSecunda "bellum" "ī" "bell" Appellativum Neutrum
-[ "bellum" 
-, "bellum" 
-, "bellum" 
-, "bellī" 
-, "bellō" 
-, "bellō" 
-] 
+[ "bellum"
+, "bellum"
+, "bellum"
+, "bellī"
+, "bellō"
+, "bellō"
+]
 
-maybe [] scribeResPerfectumPluralis    $ faceParadigma NomenSecunda "bellum" "ī" "bell" Appellativum Neutrum 
-[ "bella" 
-, "bella" 
-, "bella" 
-, "bellōrum" 
-, "bellīs" 
-, "bellīs" 
-] 
+maybe [] scribeResPerfectumPluralis    $ faceParadigma NomenSecunda "bellum" "ī" "bell" Appellativum Neutrum
+[ "bella"
+, "bella"
+, "bella"
+, "bellōrum"
+, "bellīs"
+, "bellīs"
+]
 
 
 
@@ -1384,97 +1485,97 @@ maybe [] scribeResPerfectumPluralis    $ faceParadigma NomenSecunda "bellum" "ī
 
 
 NomenQuinta Masculinum Femininum
-[ 
-    ( "diēs" 
-    , "diēs" 
-    ) 
-, 
-    ( "diem" 
-    , "diēs" 
-    ) 
-, 
-    ( "diēī" 
-    , "diērum" 
-    ) 
-, 
-    ( "diēī" 
-    , "diēbus" 
-    ) 
-, 
-    ( "diē" 
-    , "diēbus" 
-    ) 
+[
+    ( "diēs"
+    , "diēs"
+    )
+,
+    ( "diem"
+    , "diēs"
+    )
+,
+    ( "diēī"
+    , "diērum"
+    )
+,
+    ( "diēī"
+    , "diēbus"
+    )
+,
+    ( "diē"
+    , "diēbus"
+    )
 ]
 
 NomenQuinta Femininum
-[ 
-    ( "rēs" 
-    , "rēs" 
-    ) 
-, 
-    ( "rem" 
-    , "rēs" 
-    ) 
-, 
-    ( "reī" 
-    , "rērum" 
-    ) 
-, 
-    ( "reī" 
-    , "rēbus" 
-    ) 
-, 
-    ( "rē" 
-    , "rēbus" 
-    ) 
-] 
+[
+    ( "rēs"
+    , "rēs"
+    )
+,
+    ( "rem"
+    , "rēs"
+    )
+,
+    ( "reī"
+    , "rērum"
+    )
+,
+    ( "reī"
+    , "rēbus"
+    )
+,
+    ( "rē"
+    , "rēbus"
+    )
+]
 
 NomenQuarta Femininum
-[ 
-    ( "manus" 
-    , "manūs" 
-    ) 
-, 
-    ( "manum" 
-    , "manūs" 
-    ) 
-, 
-    ( "manūs" 
-    , "manuum" 
-    ) 
-, 
-    ( "manuī" 
-    , "manibus" 
-    ) 
-, 
-    ( "manū" 
-    , "manibus" 
-    ) 
-] 
+[
+    ( "manus"
+    , "manūs"
+    )
+,
+    ( "manum"
+    , "manūs"
+    )
+,
+    ( "manūs"
+    , "manuum"
+    )
+,
+    ( "manuī"
+    , "manibus"
+    )
+,
+    ( "manū"
+    , "manibus"
+    )
+]
 
 
 NomenQuarta Neutrum
-[ 
-    ( "cornū" 
-    , "cornua" 
-    ) 
-, 
-    ( "cornū" 
-    , "cornua" 
-    ) 
-, 
-    ( "cornūs" 
-    , "cornuum" 
-    ) 
-, 
-    ( "cornū" 
-    , "cornibus" 
-    ) 
-, 
-    ( "cornū" 
-    , "cornibus" 
-    ) 
-] 
+[
+    ( "cornū"
+    , "cornua"
+    )
+,
+    ( "cornū"
+    , "cornua"
+    )
+,
+    ( "cornūs"
+    , "cornuum"
+    )
+,
+    ( "cornū"
+    , "cornibus"
+    )
+,
+    ( "cornū"
+    , "cornibus"
+    )
+]
 
 
 

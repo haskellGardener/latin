@@ -441,6 +441,8 @@ syllabizer2 = do
 
     absolute :: Parser [Text]
     absolute = string "A" >> pure ["A"]
+
+                                                                                   -- Exempla
     cvaccv        = string "CVACCV"        >> pure ["CV","AC","CV"]
     cvaccvc       = string "CVACCVC"       >> pure ["CV","AC","CVC"]
     cvcccvcvc     = string "CVCCCVCVC"     >> pure ["CVCC","CV","CVC"]             -- camptaules

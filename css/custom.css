@@ -37,7 +37,7 @@ table.nomen th > b
   padding-left : 4mm;
   font-size    : 3mm;
 }
-table.nomen td:nth-child(odd) { background: #f4f4f4; }
+table.nomen td:nth-child(odd) { background: #efefef; }
 table.nomen td:nth-child(1) { text-align  : right;
                               font-size   : 2.5mm;
                               padding-top : 0.7mm;
@@ -54,7 +54,7 @@ table.nomen th { padding       : 1.7mm;
                  line-height   : 2.7mm;
                  text-align    : left;
                }
-table.nomen th:nth-child(odd) { background: #f4f4f4; }
+table.nomen th:nth-child(odd) { background: #efefef; }
 table.nomen th:nth-child(3)   { color: #CC0033; }
 table.nomen th:nth-child(n+2) { font-size: 2.0mm; }
 table.nomen th:nth-child(1)   { font-size: 2.7mm; }

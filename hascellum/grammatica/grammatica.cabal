@@ -29,6 +29,7 @@ library
   ghc-options:       -O2
   hs-source-dirs:    src
   exposed-modules:   Lib
+                   , ExemplaParadigma
                    , Nomen
                    , Syllabizer
                    , WordList
@@ -37,8 +38,12 @@ library
                    , WordsHtoM
                    , WordsNtoS
   build-depends:     base >= 4.8 && < 5
-                   , text
                    , attoparsec
+                   , blaze-html
+                   , blaze-markup
+                   , shakespeare
+                   , text
+                   
   extensions: TemplateHaskell
               QuasiQuotes
               OverloadedStrings
