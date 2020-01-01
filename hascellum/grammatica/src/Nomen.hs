@@ -218,6 +218,7 @@ scribeNomenParadigma nomen@(Nomen {..}) =
   where
     isVoc = T.append (radix voc) (suffixum voc) /= dictionariumArticulum
           && resPerfectum voc /= dictionariumArticulum
+          && not (T.null $ resPerfectum voc)
     voc  = findCGNNP Vocativus nomenGenus Singularis nomen
     vocP = findCGNNP Vocativus nomenGenus Pluralis   nomen
 
@@ -420,14 +421,14 @@ declinationes =
                              , genera = Masculinum
                              , numerus = Pluralis
                              , radix = ""
-                             , suffixum = "as"
+                             , suffixum = "ās"
                              , resPerfectum = ""
                              }
                  , Paradigma { casus = Accusativus
                              , genera = Femininum
                              , numerus = Pluralis
                              , radix = ""
-                             , suffixum = "as"
+                             , suffixum = "ās"
                              , resPerfectum = ""
                              }
                  , Paradigma { casus = Genetivus
