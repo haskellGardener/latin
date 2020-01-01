@@ -217,6 +217,7 @@ scribeNomenParadigma nomen@(Nomen {..}) =
   |]
   where
     isVoc = T.append (radix voc) (suffixum voc) /= dictionariumArticulum
+          && resPerfectum voc /= dictionariumArticulum
     voc  = findCGNNP Vocativus nomenGenus Singularis nomen
     vocP = findCGNNP Vocativus nomenGenus Pluralis   nomen
 
@@ -225,8 +226,9 @@ findCGNNP c g n Nomen {..} = fromMaybe def $ DL.find findF paradigma
   where
     def = Paradigma Nominativus Femininum Singularis "" "" ""
     findF :: Paradigma -> Bool
-    findF Paradigma {..} | genera == MasculinumFemininum = casus == c && Masculinum == g && numerus == n
-                         | otherwise = casus == c && genera == g && numerus == n
+    findF Paradigma {..}
+      | genera == MasculinumFemininum = casus == c && Masculinum == g && numerus == n
+      | otherwise = casus == c && genera == g && numerus == n
 
 labefaceApex :: Text -> Text
 labefaceApex input = T.map mapF input
@@ -305,7 +307,12 @@ faceParadigma ndecl dictionariumArticulum articulumSuffixum genetivusRadix nomen
                       , ..
                       }
         subMapF NomenSecunda Vocativus Masculinum Singularis
-          = if | "us" `T.isSuffixOf` labefaceApex dictionariumArticulum
+          = if | "ius" `T.isSuffixOf` labefaceApex dictionariumArticulum
+                 -> Paradigma { radix = genetivusRadix
+                              , resPerfectum =  T.append genetivusRadix "ī"
+                              , ..
+                              }
+               | "us" `T.isSuffixOf` labefaceApex dictionariumArticulum
                  -> Paradigma { radix = genetivusRadix
                               , resPerfectum =  T.append genetivusRadix "e"
                               , suffixum = "e"
@@ -317,17 +324,10 @@ faceParadigma ndecl dictionariumArticulum articulumSuffixum genetivusRadix nomen
                               , ..
                               }
         subMapF NomenSecunda Vocativus _ Singularis
-          = if |    "ius" `T.isSuffixOf` labefaceApex dictionariumArticulum
-                 || "ium" `T.isSuffixOf` labefaceApex dictionariumArticulum
-                 -> Paradigma { radix = genetivusRadix
-                              , resPerfectum =  T.append genetivusRadix "ī"
-                              , ..
-                              }
-               | otherwise
-                 -> Paradigma { radix = genetivusRadix
-                              , resPerfectum = dictionariumArticulum
-                              , ..
-                              }
+          = Paradigma { radix = genetivusRadix
+                      , resPerfectum = dictionariumArticulum
+                      , ..
+                      }
         subMapF NomenQuinta Genetivus _ Singularis
           = if | "ies" `T.isSuffixOf` labefaceApex dictionariumArticulum
                  -> Paradigma { radix = genetivusRadix
