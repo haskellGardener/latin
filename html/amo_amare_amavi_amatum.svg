@@ -7,34 +7,34 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="148mm"
-   height="210mm"
-   viewBox="0 0 148 210"
-   version="1.1"
-   id="svg8"
+   sodipodi:docname="amo_amare_amavi_amatum.svg"
    inkscape:version="1.0beta2 (unknown)"
-   sodipodi:docname="amo_amare_amavi_amatum.svg">
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 148 210"
+   height="210mm"
+   width="148mm">
   <defs
      id="defs2" />
   <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="4.4183782"
-     inkscape:cx="118.10402"
-     inkscape:cy="236.12964"
-     inkscape:document-units="mm"
-     inkscape:current-layer="g891"
-     inkscape:document-rotation="0"
-     showgrid="false"
-     inkscape:window-width="1826"
-     inkscape:window-height="1088"
-     inkscape:window-x="0"
+     inkscape:window-maximized="1"
      inkscape:window-y="27"
-     inkscape:window-maximized="1" />
+     inkscape:window-x="0"
+     inkscape:window-height="1088"
+     inkscape:window-width="1826"
+     showgrid="false"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="g891"
+     inkscape:document-units="mm"
+     inkscape:cy="236.12964"
+     inkscape:cx="118.10402"
+     inkscape:zoom="1"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -74,148 +74,148 @@
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Layer 1"
+     id="layer1"
      inkscape:groupmode="layer"
-     id="layer1">
+     inkscape:label="Layer 1">
     <g
        id="g891">
       <g
          id="g878">
         <text
-           xml:space="preserve"
-           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-           x="10.00515"
+           id="text834"
            y="17.484623"
-           id="text834"><tspan
-             sodipodi:role="line"
-             id="tspan832"
-             x="10.00515"
+           x="10.00515"
+           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:10px;font-family:Cantarell;-inkscape-font-specification:'Cantarell Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583px"
              y="17.484623"
-             style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:10px;font-family:Cantarell;-inkscape-font-specification:'Cantarell Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583px">amō · amāre · amāve · amātum</tspan></text>
+             x="10.00515"
+             id="tspan832"
+             sodipodi:role="line">amō · amāre · amāve · amātum</tspan></text>
         <path
-           inkscape:connector-curvature="0"
-           id="path866"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.27447px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
            d="m 69.172,19.950724 c 22.107,0 22.107,0 22.107,0"
-           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.27447px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+           id="path866"
+           inkscape:connector-curvature="0" />
         <path
-           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.265383px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-           d="m 103.50712,19.945403 c 20.667,0 20.667,0 20.667,0"
+           inkscape:connector-curvature="0"
            id="path868"
-           inkscape:connector-curvature="0" />
+           d="m 103.50712,19.945403 c 20.667,0 20.667,0 20.667,0"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.265383px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
         <path
-           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.2044px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-           d="m 49.342393,19.914814 c 12.260131,0 12.260131,0 12.260131,0"
+           inkscape:connector-curvature="0"
            id="path870"
-           inkscape:connector-curvature="0" />
+           d="m 49.342393,19.914814 c 12.260131,0 12.260131,0 12.260131,0"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.2044px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
         <path
-           inkscape:connector-curvature="0"
-           id="path872"
+           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.206807px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
            d="m 10.588923,19.917404 c 12.550702,0 12.550702,0 12.550702,0"
-           style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.206807px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+           id="path872"
+           inkscape:connector-curvature="0" />
         <path
-           inkscape:connector-curvature="0"
-           id="path874"
+           style="fill:none;fill-rule:evenodd;stroke:#f32c3d;stroke-width:0.237581px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
            d="m 35.947,9.226288 c 16.563914,0 16.563914,0 16.563914,0"
-           style="fill:none;fill-rule:evenodd;stroke:#f32c3d;stroke-width:0.237581px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
-        <path
-           style="fill:none;fill-rule:evenodd;stroke:#f32c3d;stroke-width:0.236872px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-           d="m 69.348778,9.226288 c 16.465142,0 16.465142,0 16.465142,0"
-           id="path876"
+           id="path874"
            inkscape:connector-curvature="0" />
         <path
            inkscape:connector-curvature="0"
-           id="path878"
+           id="path876"
+           d="m 69.348778,9.226288 c 16.465142,0 16.465142,0 16.465142,0"
+           style="fill:none;fill-rule:evenodd;stroke:#f32c3d;stroke-width:0.236872px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           style="fill:none;fill-rule:evenodd;stroke:#f32c3d;stroke-width:0.23759px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
            d="m 103.58,9.226288 c 16.565,0 16.565,0 16.565,0"
-           style="fill:none;fill-rule:evenodd;stroke:#f32c3d;stroke-width:0.23759px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+           id="path878"
+           inkscape:connector-curvature="0" />
         <text
-           xml:space="preserve"
-           style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;line-height:125%;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           id="text847"
+           y="28.684292"
            x="15.58"
-           y="28.684292"
-           id="text847"><tspan
-             sodipodi:role="line"
-             id="tspan845"
-             x="15.58"
-             y="28.684292"
-             style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583px">1</tspan></text>
-        <text
-           xml:space="preserve"
-           style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;line-height:125%;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
-           x="53.300312"
-           y="28.764292"
-           id="text851"><tspan
-             sodipodi:role="line"
-             id="tspan849"
-             x="53.300312"
-             y="28.764292"
-             style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583px;">2</tspan></text>
-        <text
-           xml:space="preserve"
-           style="font-weight:100;font-size:7px;line-height:125%;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';letter-spacing:0px;word-spacing:0px;fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;"
-           x="79.844971"
-           y="28.764292"
-           id="text855"><tspan
-             sodipodi:role="line"
-             id="tspan853"
-             x="79.844971"
-             y="28.764292"
-             style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583px;">3</tspan></text>
-        <text
-           xml:space="preserve"
            style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;line-height:125%;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-           x="110.73219"
-           y="28.684292"
-           id="text859"><tspan
-             sodipodi:role="line"
-             id="tspan857"
-             x="110.73219"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583px"
              y="28.684292"
-             style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583px">4</tspan></text>
+             x="15.58"
+             id="tspan845"
+             sodipodi:role="line">1</tspan></text>
+        <text
+           id="text851"
+           y="28.764292"
+           x="53.300312"
+           style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;line-height:125%;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583px;"
+             y="28.764292"
+             x="53.300312"
+             id="tspan849"
+             sodipodi:role="line">2</tspan></text>
+        <text
+           id="text855"
+           y="28.764292"
+           x="79.844971"
+           style="font-weight:100;font-size:7px;line-height:125%;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';letter-spacing:0px;word-spacing:0px;fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583px;"
+             y="28.764292"
+             x="79.844971"
+             id="tspan853"
+             sodipodi:role="line">3</tspan></text>
+        <text
+           id="text859"
+           y="28.684292"
+           x="110.73219"
+           style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;line-height:125%;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583px"
+             y="28.684292"
+             x="110.73219"
+             id="tspan857"
+             sodipodi:role="line">4</tspan></text>
       </g>
       <text
-         id="text882"
-         y="43.623215"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;line-height:125%;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          x="10.733292"
-         style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;line-height:125%;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583px"
-           y="43.623215"
-           x="10.733292"
+         y="43.623215"
+         id="text882"><tspan
+           sodipodi:role="line"
            id="tspan880"
-           sodipodi:role="line">1. praesens et imperfectum activus</tspan></text>
+           x="10.733292"
+           y="43.623215"
+           style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583px">1. praesens et imperfectum activus et passivus</tspan></text>
       <text
-         id="text886"
-         y="55.626556"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;line-height:125%;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          x="10.2961"
-         style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;line-height:125%;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583px"
-           y="55.626556"
-           x="10.2961"
+         y="55.626556"
+         id="text886"><tspan
+           sodipodi:role="line"
            id="tspan884"
-           sodipodi:role="line">2. praesens infinitivus</tspan></text>
+           x="10.2961"
+           y="55.626556"
+           style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583px">2. praesens infinitivus</tspan></text>
       <text
-         id="text890"
-         y="67.865616"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;line-height:125%;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          x="10.115292"
-         style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;line-height:125%;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583px"
-           y="67.865616"
-           x="10.115292"
+         y="67.865616"
+         id="text890"><tspan
+           sodipodi:role="line"
            id="tspan888"
-           sodipodi:role="line">3. perfectum activus</tspan></text>
+           x="10.115292"
+           y="67.865616"
+           style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583px">3. perfectum activus</tspan></text>
       <text
-         id="text894"
-         y="79.76461"
-         x="10.245292"
+         xml:space="preserve"
          style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;line-height:125%;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583px"
-           y="79.76461"
-           x="10.245292"
+         x="10.245292"
+         y="79.76461"
+         id="text894"><tspan
+           sodipodi:role="line"
            id="tspan892"
-           sodipodi:role="line">4. perfectum passivus</tspan></text>
+           x="10.245292"
+           y="79.76461"
+           style="font-style:normal;font-variant:normal;font-weight:100;font-stretch:normal;font-size:7px;font-family:Cantarell;-inkscape-font-specification:'Cantarell Thin';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583px">4. perfectum passivus</tspan></text>
     </g>
   </g>
 </svg>
